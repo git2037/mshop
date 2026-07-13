@@ -50,4 +50,18 @@ public class UserExceptionHandler {
         log.error("Keycloak configuration failure!", e);
         return ApiResponse.buildFailResponse(e);
     }
+
+    @ExceptionHandler(value = {UserNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<Void> handleUserNotFoundException(UserNotFoundException e) {
+        log.warn("User not found!");
+        return ApiResponse.buildFailResponse(e);
+    }
+
+    @ExceptionHandler(value = {UserAlreadyExistsException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleUserAlreadyExistsException(UserAlreadyExistsException e) {
+        log.error("User already exists!");
+        return ApiResponse.buildFailResponse(e);
+    }
 }

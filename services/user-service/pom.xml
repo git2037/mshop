@@ -58,6 +58,8 @@
         <module>infrastructure/user-infra-client</module>
         <module>user-common</module>
         <module>user-application</module>
+        <module>infrastructure/user-infra-data</module>
+        <module>user-migration</module>
     </modules>
 
     <build>

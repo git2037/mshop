@@ -37,7 +37,7 @@ public class UserController {
         User user = requestMapper.toUser(request);
         KeycloakAccount account = requestMapper.toAccunt(request);
 
-        log.info("Creating user...");
+        log.info("Creating user with email={}", request.getEmail());
         User createdUser = authService.register(user, account);
         log.info("Successfully created user");
 

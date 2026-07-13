@@ -6,6 +6,7 @@ import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.repository.KeycloakRepository;
 import com.mshop.app.user.service.AuthService;
+import com.mshop.app.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl implements AuthService {
 
     private final KeycloakRepository keycloakRepository;
+    private final UserService userService;
 
     @Override
     public User register(User user, KeycloakAccount account) {
@@ -28,7 +30,10 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("User created successfully id={}", keycloakId);
 
-        return User.builder()
-                .keycloakId(keycloakId).build();
+        user.setKeycloakId(keycloakId);
+        log.info("Save user profile to DB");
+        User userFromDB = userService.createProfile(user);
+        log.info("Save user profile successfully");
+        return userFromDB;
     }
 }
