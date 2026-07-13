@@ -2,6 +2,7 @@ package com.mshop.app.user.service.impl;
 
 import com.mshop.app.common.core.exception.SystemCode;
 import com.mshop.app.common.core.exception.SystemException;
+import com.mshop.app.user.exception.UserAlreadyExistsException;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.repository.KeycloakRepository;
@@ -30,10 +31,24 @@ public class AuthServiceImpl implements AuthService {
 
         log.info("User created successfully id={}", keycloakId);
 
-        user.setKeycloakId(keycloakId);
-        log.info("Save user profile to DB");
-        User userFromDB = userService.createProfile(user);
-        log.info("Save user profile successfully");
-        return userFromDB;
+        try {
+            user.setKeycloakId(keycloakId);
+            log.info("Save user profile to DB");
+            User userFromDB = userService.createProfile(user);
+            log.info("Save user profile successfully");
+            return userFromDB;
+        } catch (UserAlreadyExistsException ex) {
+            String email = account.getEmail();
+            log.warn("Email {} exists in Database but does NOT exist in Keycloak.", email);
+            log.warn("This profile will be linked to keycloak account id = {}", keycloakId);
+            User userWithEmail = userService.getUserProfile(email);
+            userWithEmail.setKeycloakId(keycloakId);
+            return userWithEmail;
+        } catch (Exception e) {
+            log.warn("Save user profile to DB failed. Rolling back user account in keycloak");
+            keycloakRepository.deleteAccount(keycloakId);
+            log.info("Rolling back user account in keycloak successfully");
+            throw e;
+        }
     }
 }

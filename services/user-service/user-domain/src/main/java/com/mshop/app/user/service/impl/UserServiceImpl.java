@@ -2,6 +2,7 @@ package com.mshop.app.user.service.impl;
 
 import com.mshop.app.user.exception.UserAlreadyExistsException;
 import com.mshop.app.user.exception.UserCode;
+import com.mshop.app.user.exception.UserNotFoundException;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.repository.UserRepository;
 import com.mshop.app.user.service.UserService;
@@ -9,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,5 +29,15 @@ public class UserServiceImpl implements UserService {
         }
 
         return repository.create(user);
+    }
+
+    @Override
+    public User getUserProfile(String email) {
+        return repository.findByEmail(email).orElseThrow(
+                () -> {
+                    log.warn("User with email {} not found", email);
+                    return new UserNotFoundException(UserCode.USER_NOT_FOUND);
+                }
+        );
     }
 }

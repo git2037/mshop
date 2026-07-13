@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface KeycloakRepository {
     Optional<String> createAccount(KeycloakAccount account);
+
+    void deleteAccount(String id);
 }

@@ -59,6 +59,14 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         return Optional.empty();
     }
 
+    @Override
+    public void deleteAccount(String id) {
+        String userDetailUri = adminUserUri + "/" + id;
+
+        log.info("Calling Keycloak to delete user with id={}", id);
+        callKeycloakWithBodyRequest(HttpMethod.DELETE, userDetailUri, null);
+    }
+
     private ResponseEntity<Void> callKeycloakWithBodyRequest(HttpMethod method, String uri, Object body) {
         try {
             RestClient.RequestBodySpec request = restClient.method(method)
