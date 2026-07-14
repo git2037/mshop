@@ -19,6 +19,15 @@ public enum SearchCode implements ErrorCode {
     INVALID_SORT_FIELD("SEARCH_007", "The field '{field}' is not allowed for sorting."),
     INVALID_SORT_OPERATOR("SEARCH_008", "Invalid sort operator for field '{field}'. Only 'asc' or 'desc' are supported."),
 
+    // search param error
+    INVALID_SEARCH_VALUE("SEARCH_008", "Invalid value provided for query parameter '{field}'."),
+    INVALID_SEARCH_FIELD("SEARCH_009", "The specified field '{field}' is not allowed for searching."),
+    INVALID_OPERATOR("SEARCH_0010", "Operator '{operator}' not support searching for field '{field}'."),
+    SEARCH_FIELD_NEED_TRIMMING("SEARCH_012", "The search parameter '{field}' is invalid."),
+    SEARCH_FIELD_NOT_CONTAIN_UPPERCASE("SEARCH_013", "The search parameter '{field}' is invalid."),
+    NULL_TYPE_SEARCH_FIELD("SEARCH_010", "FilterField '{field}' type cannot be null."),
+    INVALID_PARSE_TYPE("SEARCH_011", "No parser registered for type: '{type}'"),
+
     ;
 
     private final String code;
