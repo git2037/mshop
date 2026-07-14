@@ -1,0 +1,9 @@
+databaseChangeLog:
+  - changeSet:
+      id: 01-create-user-profile
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/db/changelog/source/01-create-user-profile.sql
