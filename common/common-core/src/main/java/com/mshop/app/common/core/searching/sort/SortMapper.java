@@ -41,9 +41,20 @@ public class SortMapper {
 
         String field = part[0];
 
-        return lengthPart == 1
-                ? new SortField(field, SortDirection.ASC)
-                : new SortField(field, SortDirection.fromString(part[1]));
+        SortField sortField;
+
+        if (lengthPart == 1) {
+            sortField = new SortField(field, SortDirection.ASC);
+        } else {
+            try {
+                SortDirection sortDirection = SortDirection.fromString(part[1]);
+                sortField = new SortField(field, sortDirection);
+            } catch (IllegalArgumentException e) {
+                throw new ValidationException(SearchCode.INVALID_SORT_OPERATOR, Map.of("field", field));
+            }
+        }
+
+        return sortField;
     }
 
     private static void validateField(String field, Map<String, SortField> allowedSortField) {
