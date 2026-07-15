@@ -1,5 +1,6 @@
 package com.mshop.app.common.core.searching.sort;
 
+import com.mshop.app.common.core.utils.StringUtils;
 import org.springframework.data.domain.Sort;
 
 import java.util.ArrayList;
@@ -19,7 +20,7 @@ public class SortBuilder {
 
         List<Sort.Order> orders = new ArrayList<>();
         for (Map.Entry<String, SortDirection> entry : sortValues.entrySet()) {
-            String field = entry.getKey();
+            String field = StringUtils.kebabCaseToCamelCase(entry.getKey());
             String direction = entry.getValue().name();
             orders.add(new Sort.Order(Sort.Direction.fromString(direction), field));
         }
