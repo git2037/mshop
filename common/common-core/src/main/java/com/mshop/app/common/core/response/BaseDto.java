@@ -1,12 +1,12 @@
 package com.mshop.app.common.core.response;
 
-import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
-@MappedSuperclass
+@SuperBuilder
 @Getter
 @Setter
 public class BaseDto {
