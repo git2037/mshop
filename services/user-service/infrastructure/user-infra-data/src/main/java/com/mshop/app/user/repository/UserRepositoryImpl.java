@@ -1,5 +1,10 @@
 package com.mshop.app.user.repository;
 
+import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
+import com.mshop.app.common.core.searching.filter.FilterCondition;
+import com.mshop.app.common.core.searching.model.Pagination;
+import com.mshop.app.common.core.searching.model.Query;
+import com.mshop.app.common.core.searching.sort.SortBuilder;
 import com.mshop.app.user.exception.UserAlreadyExistsException;
 import com.mshop.app.user.exception.UserCode;
 import com.mshop.app.user.jpa.entity.UserEntity;
@@ -46,5 +51,24 @@ public class UserRepositoryImpl implements UserRepository {
             log.warn("User with email {} already exists", user.getEmail());
             throw new UserAlreadyExistsException(UserCode.USER_ALREADY_EXIST);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<User> findAll(Query query) {
+        Sort sort = SortBuilder.buildSort(query.getSortBy());
+        Pagination pagination = query.getPagination();
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getPageSize(), sort);
+
+        Specification<UserEntity> specification = Specification.unrestricted();
+        for (FilterCondition condition : query.getFilters()) {
+            specification = specification.and(SpecificationBuilder.buildSpecification(condition));
+        }
+
+        log.info("Fetching user list from database.");
+        log.debug("Fetching user list with page: {}, size: {} from db", pageable.getPageNumber(), pageable.getPageSize());
+        Page<UserEntity> entityPage = userJPARepository.findAll(specification, pageable);
+
+        return entityPage.getContent().stream().map(mapper::toUser).toList();
     }
 }

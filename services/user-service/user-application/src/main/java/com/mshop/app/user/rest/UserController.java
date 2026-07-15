@@ -1,17 +1,20 @@
 package com.mshop.app.user.rest;
 
 import com.mshop.app.common.core.response.ApiResponse;
+import com.mshop.app.common.core.searching.model.Query;
+import com.mshop.app.common.core.searching.parser.QueryParamParser;
 import com.mshop.app.user.mapper.RequestMapper;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.request.UserCreationRequest;
+import com.mshop.app.user.search.UserSearchConfig;
 import com.mshop.app.user.service.AuthService;
+import com.mshop.app.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,6 +33,21 @@ public class UserController {
 
     private final RequestMapper requestMapper;
     private final AuthService authService;
+    private final UserSearchConfig searchConfig;
+    private final UserService userservice;
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<List<User>> getAllUsers(@RequestParam(required = false, name = "sort") List<String> sort,
+                                               @RequestParam Map<String, String> filter) {
+        Query query = QueryParamParser.parseQueryParam(filter, sort, searchConfig);
+
+        log.info("Fetching user list...");
+        List<User> users = userservice.findAll(query);
+        log.info("Successfully retrieved user list.");
+
+        return ApiResponse.buidSuccessResponse("Users fetched successfully", users);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,6 +1,7 @@
 package com.mshop.app.common.core.exception;
 
 import com.mshop.app.common.core.response.ApiResponse;
+import com.mshop.app.common.core.searching.exception.SearchConfigurationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,7 +12,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(value = {ConfigurationException.class})
+    @ExceptionHandler(value = {ConfigurationException.class,
+            SearchConfigurationException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ApiResponse<Void> handleConfigurationException(ConfigurationException ex) {
         log.error("Configuration failure detected!", ex);
@@ -29,7 +31,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleValidationException(ValidationException ex) {
-        return ApiResponse.buildFailResponse(ex);
+        return ApiResponse.buildFailResponse(ex.getCode().getCode(), ex.getMessage());
     }
 
     @ExceptionHandler(value = {Exception.class})
