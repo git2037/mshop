@@ -1,5 +1,6 @@
 package com.mshop.app.common.core.searching.parser;
 
+import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.filter.FilterCondition;
 import com.mshop.app.common.core.searching.filter.FilterField;
 import com.mshop.app.common.core.searching.filter.FilterMapper;
@@ -20,9 +21,10 @@ public class QueryParamParser {
 
     public static Query parseQueryParam(Map<String, String> queryParams,
                                         List<String> sort,
-                                        List<FilterField> allowedSearchField,
-                                        List<SortField> allowedSortField
+                                        SearchConfig searchConfig
     ) {
+        List<FilterField> allowedSearchField = searchConfig.getSearchableFields();
+        List<SortField> allowedSortField = searchConfig.getSortableFields();
         Map<String, String> params = QueryParamValidator.validateParams(queryParams);
         Pagination pagination = PaginationPaser.parse(params);
 
