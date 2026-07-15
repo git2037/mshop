@@ -1,4 +1,4 @@
-package com.mshop.app.common.core.searching.constant;
+package com.mshop.app.common.core.constant;
 
 public class PaginationConstants {
     private PaginationConstants() {

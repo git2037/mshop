@@ -28,6 +28,10 @@ public enum SearchCode implements ErrorCode {
     NULL_TYPE_SEARCH_FIELD("SEARCH_010", "FilterField '{field}' type cannot be null."),
     INVALID_PARSE_TYPE("SEARCH_011", "No parser registered for type: '{type}'"),
 
+    // pagination error
+    INVALID_PAGE_PARAM("SEARCH_014", "The 'page' parameter must be a positive integer."),
+    INVALID_PAGE_SIZE_PARAM("SEARCH_015", "The 'size' parameter must be a positive integer.");
+
     ;
 
     private final String code;
