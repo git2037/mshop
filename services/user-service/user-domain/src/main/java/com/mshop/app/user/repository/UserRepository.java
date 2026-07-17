@@ -15,5 +15,5 @@ public interface UserRepository {
 
     User update(String userId, User user);
 
-    boolean existsById(String userId);
+    boolean existsActiveUserById(String userId);
 }

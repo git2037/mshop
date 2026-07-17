@@ -73,6 +73,7 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    @Transactional
     public User update(String userId, User user) {
         UserEntity entity = userJPARepository.findByIdAndDeletedIsNull(userId)
                 .orElseThrow();
@@ -85,7 +86,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public boolean existsById(String userId) {
-        return userJPARepository.existsById(userId);
+    @Transactional(readOnly = true)
+    public boolean existsActiveUserById(String userId) {
+        return userJPARepository.existsByIdAndDeletedIsNull(userId);
     }
 }
