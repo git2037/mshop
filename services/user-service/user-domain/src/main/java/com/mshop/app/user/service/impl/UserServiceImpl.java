@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateProfile(String userId, User user) {
-        if (repository.existsById(userId)) {
+        if (repository.existsActiveUserById(userId)) {
             return repository.update(userId, user);
         } else {
             log.warn("User with id {} not found", userId);
