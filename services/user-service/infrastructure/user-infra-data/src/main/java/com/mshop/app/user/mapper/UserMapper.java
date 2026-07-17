@@ -30,5 +30,5 @@ public interface UserMapper extends BaseMapper<UserEntity, User> {
     }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void updateUserFromDto(User dto, @MappingTarget UserEntity entity);
+    void updateUserEntityFromDto(User dto, @MappingTarget UserEntity entity);
 }

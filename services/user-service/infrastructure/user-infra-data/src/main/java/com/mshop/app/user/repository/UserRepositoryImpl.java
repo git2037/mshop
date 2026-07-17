@@ -71,4 +71,21 @@ public class UserRepositoryImpl implements UserRepository {
 
         return entityPage.getContent().stream().map(mapper::toUser).toList();
     }
+
+    @Override
+    public User update(String userId, User user) {
+        UserEntity entity = userJPARepository.findByIdAndDeletedIsNull(userId)
+                .orElseThrow();
+
+        mapper.updateUserEntityFromDto(user, entity);
+
+        log.info("Updating user with id = {} from db", userId);
+        UserEntity updatedUser =  userJPARepository.save(entity);
+        return mapper.toUser(updatedUser);
+    }
+
+    @Override
+    public boolean existsById(String userId) {
+        return userJPARepository.existsById(userId);
+    }
 }

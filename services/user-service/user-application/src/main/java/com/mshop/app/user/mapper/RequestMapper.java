@@ -3,21 +3,15 @@ package com.mshop.app.user.mapper;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.request.UserCreationRequest;
-import org.springframework.stereotype.Component;
+import com.mshop.app.user.request.UserUpdateRequest;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingConstants;
 
-@Component
-public class RequestMapper {
-    public User toUser(UserCreationRequest request) {
-        return User.builder()
-                .email(request.getEmail())
-                .fullName(request.getFullName())
-                .phoneNumber(request.getPhoneNumber())
-                .build();
-    }
+@Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
+public interface RequestMapper {
+    User toUser(UserCreationRequest request);
 
-    public KeycloakAccount toAccunt(UserCreationRequest request) {
-        return KeycloakAccount.builder()
-                .email(request.getEmail())
-                .password(request.getPassword()).build();
-    }
+    KeycloakAccount toAccunt(UserCreationRequest request);
+
+    User toUser(UserUpdateRequest request);
 }

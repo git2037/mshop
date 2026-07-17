@@ -47,4 +47,14 @@ public class UserServiceImpl implements UserService {
     public List<User> findAll(Query request) {
         return repository.findAll(request);
     }
+
+    @Override
+    public User updateProfile(String userId, User user) {
+        if (repository.existsById(userId)) {
+            return repository.update(userId, user);
+        } else {
+            log.warn("User with id {} not found", userId);
+            throw new UserNotFoundException(UserCode.USER_NOT_FOUND);
+        }
+    }
 }

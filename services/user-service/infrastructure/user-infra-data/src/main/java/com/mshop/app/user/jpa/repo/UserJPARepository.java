@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface UserJPARepository extends JpaRepository<UserEntity, String>, JpaSpecificationExecutor<UserEntity> {
 
     Optional<UserEntity> findByEmail(String email);
+
+    Optional<UserEntity> findByIdAndDeletedIsNull(String userId);
 }

@@ -11,4 +11,6 @@ public interface UserService {
     User getUserProfile(String email);
 
     List<User> findAll(Query request);
+
+    User updateProfile(String userId, User user);
 }

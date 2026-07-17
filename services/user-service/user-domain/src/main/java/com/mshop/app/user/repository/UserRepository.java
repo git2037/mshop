@@ -12,4 +12,8 @@ public interface UserRepository {
     User create(User user);
 
     List<User> findAll(Query query);
+
+    User update(String userId, User user);
+
+    boolean existsById(String userId);
 }
