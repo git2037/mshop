@@ -7,6 +7,7 @@ import com.mshop.app.user.mapper.RequestMapper;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
 import com.mshop.app.user.request.UserCreationRequest;
+import com.mshop.app.user.request.UserUpdateRequest;
 import com.mshop.app.user.search.UserSearchConfig;
 import com.mshop.app.user.service.AuthService;
 import com.mshop.app.user.service.UserService;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,4 +63,22 @@ public class UserController {
 
         return ApiResponse.buidSuccessResponse("Create user successfully", createdUser);
     }
+
+    @PatchMapping
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<User> update(@RequestBody @Valid UserUpdateRequest request) {
+        // TODO: integrate Spring Security (JWT).
+        //       Get current user from token
+        //       Remove dependency on client-provided in UserUpdateRequest
+        String id = "9c90b0f5-1bf5-4181-870a-3897fa280cc8";
+
+        User user = requestMapper.toUser(request);
+
+        log.info("Updating user with id={}", id);
+        User userUpdated = userservice.updateProfile(id, user);
+        log.info("Successfully updated user");
+
+        return ApiResponse.buidSuccessResponse("Update user successfully", userUpdated);
+    }
+
 }

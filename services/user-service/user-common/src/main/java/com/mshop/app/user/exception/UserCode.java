@@ -15,6 +15,7 @@ public enum UserCode implements ErrorCode {
     FULL_NAME_NOT_BLANK("USER_003", "Full name cannot be blank"),
     PASSWORD_NOT_BLANK("USER_004", "Password cannot be blank"),
     PASSWORD_MIN_LENGTH("USER_005", "Password length cannot be less than {min} characters"),
+    INVALID_PHONE_NUMBER("USER_006", "Phone number must be a valid 10-digit format (e.g., 0912345678)"),
 
     // bussiness
     USER_NOT_FOUND("USER_404", "User not found."),
