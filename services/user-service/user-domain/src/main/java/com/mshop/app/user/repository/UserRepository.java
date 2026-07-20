@@ -16,4 +16,8 @@ public interface UserRepository {
     User update(String userId, User user);
 
     boolean existsActiveUserById(String userId);
+
+    Optional<User> findById(String userId);
+
+    User update(User user);
 }

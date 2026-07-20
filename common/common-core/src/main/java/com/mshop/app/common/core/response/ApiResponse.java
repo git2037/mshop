@@ -1,6 +1,5 @@
 package com.mshop.app.common.core.response;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.mshop.app.common.core.exception.AppException;
 import com.mshop.app.common.core.exception.ErrorCode;
 import lombok.Builder;
@@ -10,7 +9,6 @@ import java.util.Map;
 
 @Builder
 @Getter
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
     private String code;
     private String message;
