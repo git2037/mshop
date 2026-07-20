@@ -17,4 +17,6 @@ public interface UserService {
     User findById(String id);
 
     void disableUser(String id);
+
+    void enableUser(String id);
 }
