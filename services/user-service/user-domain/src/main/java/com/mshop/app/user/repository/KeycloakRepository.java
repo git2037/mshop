@@ -10,4 +10,6 @@ public interface KeycloakRepository {
     void deleteAccount(String id);
 
     void disableAccount(String keycloakId);
+
+    void enableAccount(String keycloakId);
 }

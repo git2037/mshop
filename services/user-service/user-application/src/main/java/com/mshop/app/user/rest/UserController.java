@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -85,11 +86,21 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse<Void> implementSoftDelete(@PathVariable("id") String id) {
-        log.info("Implementing soft-delete user with id={}", id);
-        userservice.disableUser(id);
+    public ApiResponse<Void> implementSoftDelete(@PathVariable("id") String userId) {
+        log.info("Implementing soft-delete user with id={}", userId);
+        userservice.disableUser(userId);
         log.info("Successfully implementing soft-delete user");
 
         return ApiResponse.buidSuccessResponse("Soft-delete user successfully", null);
+    }
+
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public ApiResponse<Void> activeUser(@PathVariable("id") String userId) {
+        log.info("Starting activate user with id={}", userId);
+        userservice.enableUser(userId);
+        log.info("Successfully activated user");
+
+        return ApiResponse.buidSuccessResponse("Enable user successfully", null);
     }
 }

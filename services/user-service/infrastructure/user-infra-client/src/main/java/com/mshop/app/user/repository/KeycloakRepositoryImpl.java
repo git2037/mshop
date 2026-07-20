@@ -83,6 +83,17 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         callKeycloakWithBodyRequest(HttpMethod.PUT, userDetailUri, user);
     }
 
+    @Override
+    public void enableAccount(String keycloakId) {
+        String userDetailUri = adminUserUri + "/" + keycloakId;
+
+        log.info("Calling Keycloak to enable user with id={}", keycloakId);
+        UserRepresentation user = UserRepresentation.buildFromEnabled(Boolean.TRUE);
+        log.debug("Calling Keycloak to enable user with body={}", getRequestBody(user));
+
+        callKeycloakWithBodyRequest(HttpMethod.PUT, userDetailUri, user);
+    }
+
     private ResponseEntity<Void> callKeycloakWithBodyRequest(HttpMethod method, String uri, Object body) {
         try {
             RestClient.RequestBodySpec request = restClient.method(method)
