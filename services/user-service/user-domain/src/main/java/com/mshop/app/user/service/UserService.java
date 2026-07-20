@@ -13,4 +13,8 @@ public interface UserService {
     List<User> findAll(Query request);
 
     User updateProfile(String userId, User user);
+
+    User findById(String id);
+
+    void disableUser(String id);
 }

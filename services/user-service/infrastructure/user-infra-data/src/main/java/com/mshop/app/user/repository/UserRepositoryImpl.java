@@ -90,4 +90,17 @@ public class UserRepositoryImpl implements UserRepository {
     public boolean existsActiveUserById(String userId) {
         return userJPARepository.existsByIdAndDeletedIsNull(userId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<User> findById(String userId) {
+        return userJPARepository.findById(userId).map(mapper::toUser);
+    }
+
+    @Override
+    @Transactional
+    public User update(User user) {
+        UserEntity updatedUser = userJPARepository.save(mapper.toEntity(user));
+        return mapper.toUser(updatedUser);
+    }
 }

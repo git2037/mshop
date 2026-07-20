@@ -1,5 +1,7 @@
 package com.mshop.app.user.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mshop.app.common.core.exception.AppException;
 import com.mshop.app.common.core.exception.SystemCode;
 import com.mshop.app.common.core.exception.SystemException;
@@ -29,9 +31,11 @@ import static org.springframework.security.oauth2.client.web.client.RequestAttri
 public class KeycloakRepositoryImpl implements KeycloakRepository {
 
     private final RestClient restClient;
+    private final ObjectMapper objectMapper;
 
-    public KeycloakRepositoryImpl(@Qualifier("apiRestClient") RestClient restClient) {
+    public KeycloakRepositoryImpl(@Qualifier("apiRestClient") RestClient restClient, ObjectMapper objectMapper) {
         this.restClient = restClient;
+        this.objectMapper = objectMapper;
     }
 
     @Value("${keycloak.admin-user-uri}")
@@ -43,6 +47,7 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
     public Optional<String> createAccount(KeycloakAccount account) {
         UserRepresentation user = UserRepresentation.create(account.getEmail(), account.getPassword());
         log.info("Calling Keycloak to create user with email={}", user.getEmail());
+        log.debug("Calling Keycloak to create user with body={}", getRequestBody(user));
 
         ResponseEntity<Void> resp = callKeycloakWithBodyRequest(HttpMethod.POST,
                 adminUserUri,
@@ -65,6 +70,17 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
 
         log.info("Calling Keycloak to delete user with id={}", id);
         callKeycloakWithBodyRequest(HttpMethod.DELETE, userDetailUri, null);
+    }
+
+    @Override
+    public void disableAccount(String keycloakId) {
+        String userDetailUri = adminUserUri + "/" + keycloakId;
+
+        log.info("Calling Keycloak to disable user with id={}", keycloakId);
+        UserRepresentation user = UserRepresentation.buildFromEnabled(Boolean.FALSE);
+        log.debug("Calling Keycloak to disable user with body={}", getRequestBody(user));
+
+        callKeycloakWithBodyRequest(HttpMethod.PUT, userDetailUri, user);
     }
 
     private ResponseEntity<Void> callKeycloakWithBodyRequest(HttpMethod method, String uri, Object body) {
@@ -127,5 +143,14 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         }
 
         return location.substring(location.lastIndexOf("/") + 1);
+    }
+
+    private String getRequestBody(Object body) {
+        try {
+            return objectMapper.writeValueAsString(body);
+        } catch (JsonProcessingException e) {
+            log.error("Error getting JSON body", e);
+            return null;
+        }
     }
 }

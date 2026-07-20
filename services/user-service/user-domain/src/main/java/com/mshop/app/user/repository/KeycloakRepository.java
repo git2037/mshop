@@ -8,4 +8,6 @@ public interface KeycloakRepository {
     Optional<String> createAccount(KeycloakAccount account);
 
     void deleteAccount(String id);
+
+    void disableAccount(String keycloakId);
 }

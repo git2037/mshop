@@ -26,11 +26,7 @@ public class UserRepresentation {
     }
 
     public static UserRepresentation buildFromEnabled(Boolean enabled) {
-        List<Credential> credentials = List.of(Credential.builder()
-                .temporary(null)
-                .value(null).build());
-
-        return new UserRepresentation(null, enabled, null, credentials);
+        return new UserRepresentation(null, enabled, null, null);
     }
 
     @Builder
