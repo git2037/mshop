@@ -7,3 +7,12 @@ databaseChangeLog:
         - sqlFile:
             dbms: mysql
             path: classpath:/db/changelog/source/01-create-user-profile.sql
+
+  - changeSet:
+      id: 02-add-keycloak-deleted-column
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/db/changelog/source/02-add-keycloak-deleted-column.sql
