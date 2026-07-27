@@ -24,6 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Slf4j
@@ -81,7 +83,7 @@ public class UserRepositoryImpl implements UserRepository {
         mapper.updateUserEntityFromDto(user, entity);
 
         log.info("Updating user with id = {} from db", userId);
-        UserEntity updatedUser =  userJPARepository.save(entity);
+        UserEntity updatedUser = userJPARepository.save(entity);
         return mapper.toUser(updatedUser);
     }
 
@@ -102,5 +104,14 @@ public class UserRepositoryImpl implements UserRepository {
     public User update(User user) {
         UserEntity updatedUser = userJPARepository.save(mapper.toEntity(user));
         return mapper.toUser(updatedUser);
+    }
+
+    @Override
+    public Set<String> findKeycloakIdIn(List<String> keycloakIds) {
+        List<UserEntity> userEntityList = userJPARepository.findByKeycloakIdIn(keycloakIds);
+
+        return userEntityList.stream()
+                .map(UserEntity::getKeycloakId)
+                .collect(Collectors.toSet());
     }
 }

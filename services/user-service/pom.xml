@@ -28,6 +28,12 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-kafka</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+            <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
                 <version>${mapstruct.version}</version>
@@ -60,6 +66,8 @@
         <module>user-application</module>
         <module>infrastructure/user-infra-data</module>
         <module>user-migration</module>
+        <module>infrastructure/user-infra-kafka</module>
+        <module>user-worker</module>
     </modules>
 
     <build>

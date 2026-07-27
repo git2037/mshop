@@ -4,16 +4,16 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @SuperBuilder
 @Getter
 @Setter
 public class BaseDto {
     String id;
-    LocalDateTime createdAt;
+    Instant createdAt;
     String createdBy;
-    LocalDateTime updatedAt;
+    Instant updatedAt;
     String updatedBy;
-    LocalDateTime deleted;
+    Instant deleted;
 }

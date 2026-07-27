@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @SuperBuilder
 @Getter
@@ -19,5 +19,5 @@ public class User extends BaseDto {
 
     private String phoneNumber;
 
-    private LocalDateTime keycloakDisabled;
+    private Instant keycloakDisabled;
 }

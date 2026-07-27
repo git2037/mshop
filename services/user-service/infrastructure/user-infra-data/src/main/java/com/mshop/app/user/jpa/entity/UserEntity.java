@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Getter
 @Setter
@@ -34,5 +34,5 @@ public class UserEntity extends BaseEntity {
     private String phoneNumber;
 
     @Column(name = "keycloak_disabled")
-    private LocalDateTime keycloakDisabled;
+    private Instant keycloakDisabled;
 }

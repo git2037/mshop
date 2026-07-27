@@ -12,8 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,7 +75,7 @@ public class UserServiceImpl implements UserService {
             return;
 
         log.info("Disabling user with id {}", id);
-        user.setDeleted(LocalDateTime.now(ZoneId.systemDefault()));
+        user.setDeleted(Instant.now());
         User disabledUser = userRepository.update(user);
         log.info("User with id {} is disabled", id);
 
@@ -91,7 +90,7 @@ public class UserServiceImpl implements UserService {
             log.info("Keycloak account with id {} is disabled", keycloakId);
 
             log.info("Setting 'keycloak_disabled' field in DB to disabled for userId={}", id);
-            user.setKeycloakDisabled(LocalDateTime.now(ZoneId.systemDefault()));
+            user.setKeycloakDisabled(Instant.now());
             updateKeycloakDisabledField(user, DISABLE_ACTION);
         }
     }
