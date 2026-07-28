@@ -21,6 +21,9 @@ public enum UserCode implements ErrorCode {
     USER_NOT_FOUND("USER_404", "User not found."),
     USER_ALREADY_EXIST("USER_ALREADY_EXIST", "User already exist."),
 
+    // user job
+    USER_JOB_NOT_FOUND("USER_JOB_404", "Job not found."),
+
     // invalid UserCode
     INVALID_USER_CODE("USER_999", ErrorMessage.GENERIC),
     ;

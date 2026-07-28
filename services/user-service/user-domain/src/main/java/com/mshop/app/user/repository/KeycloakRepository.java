@@ -2,6 +2,7 @@ package com.mshop.app.user.repository;
 
 import com.mshop.app.user.model.KeycloakAccount;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface KeycloakRepository {
@@ -12,4 +13,6 @@ public interface KeycloakRepository {
     void disableAccount(String keycloakId);
 
     void enableAccount(String keycloakId);
+
+    List<KeycloakAccount> getAccountsCreatedAfter(long createdAfter, int size);
 }

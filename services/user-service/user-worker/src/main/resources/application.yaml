@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: user-service-worker
+
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}

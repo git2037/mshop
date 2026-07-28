@@ -5,6 +5,7 @@ import com.mshop.app.user.model.User;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface UserRepository {
     Optional<User> findByEmail(String email);
@@ -20,4 +21,6 @@ public interface UserRepository {
     Optional<User> findById(String userId);
 
     User update(User user);
+
+    Set<String> findKeycloakIdIn(List<String> keycloakIds);
 }

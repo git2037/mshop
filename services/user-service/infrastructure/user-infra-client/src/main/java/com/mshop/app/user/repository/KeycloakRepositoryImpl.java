@@ -10,17 +10,24 @@ import com.mshop.app.user.exception.KeycloakConfigurationException;
 import com.mshop.app.user.exception.UserAlreadyExistsException;
 import com.mshop.app.user.exception.UserNotFoundException;
 import com.mshop.app.user.model.KeycloakAccount;
+import com.mshop.app.user.model.KeycloakHttpRequest;
 import com.mshop.app.user.model.UserRepresentation;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
+import java.time.Instant;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static com.mshop.app.user.constant.OAuth2ClientConstant.USER_SERVICE_CLIENT;
@@ -28,15 +35,11 @@ import static org.springframework.security.oauth2.client.web.client.RequestAttri
 
 @Repository
 @Slf4j
+@RequiredArgsConstructor
 public class KeycloakRepositoryImpl implements KeycloakRepository {
 
     private final RestClient restClient;
     private final ObjectMapper objectMapper;
-
-    public KeycloakRepositoryImpl(@Qualifier("apiRestClient") RestClient restClient, ObjectMapper objectMapper) {
-        this.restClient = restClient;
-        this.objectMapper = objectMapper;
-    }
 
     @Value("${keycloak.admin-user-uri}")
     private String adminUserUri;
@@ -49,9 +52,10 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         log.info("Calling Keycloak to create user with email={}", user.getEmail());
         log.debug("Calling Keycloak to create user with body={}", getRequestBody(user));
 
-        ResponseEntity<Void> resp = callKeycloakWithBodyRequest(HttpMethod.POST,
-                adminUserUri,
-                user);
+        KeycloakHttpRequest request = KeycloakHttpRequest.builder()
+                .method(HttpMethod.POST).uri(adminUserUri).body(user).build();
+        ResponseEntity<Void> resp = callKeycloak(request, new ParameterizedTypeReference<>() {
+        });
 
         if (resp.getStatusCode().is2xxSuccessful()) {
             log.info("User successfully processed in Keycloak");
@@ -69,7 +73,11 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         String userDetailUri = adminUserUri + "/" + id;
 
         log.info("Calling Keycloak to delete user with id={}", id);
-        callKeycloakWithBodyRequest(HttpMethod.DELETE, userDetailUri, null);
+
+        KeycloakHttpRequest request = KeycloakHttpRequest.builder()
+                .method(HttpMethod.DELETE).uri(userDetailUri).body(null).build();
+        callKeycloak(request, new ParameterizedTypeReference<>() {
+        });
     }
 
     @Override
@@ -80,7 +88,10 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         UserRepresentation user = UserRepresentation.buildFromEnabled(Boolean.FALSE);
         log.debug("Calling Keycloak to disable user with body={}", getRequestBody(user));
 
-        callKeycloakWithBodyRequest(HttpMethod.PUT, userDetailUri, user);
+        KeycloakHttpRequest request = KeycloakHttpRequest.builder()
+                .method(HttpMethod.PUT).uri(userDetailUri).body(user).build();
+        callKeycloak(request, new ParameterizedTypeReference<>() {
+        });
     }
 
     @Override
@@ -91,21 +102,55 @@ public class KeycloakRepositoryImpl implements KeycloakRepository {
         UserRepresentation user = UserRepresentation.buildFromEnabled(Boolean.TRUE);
         log.debug("Calling Keycloak to enable user with body={}", getRequestBody(user));
 
-        callKeycloakWithBodyRequest(HttpMethod.PUT, userDetailUri, user);
+        KeycloakHttpRequest request = KeycloakHttpRequest.builder()
+                .method(HttpMethod.PUT).uri(userDetailUri).body(user).build();
+        callKeycloak(request, new ParameterizedTypeReference<>() {
+        });
     }
 
-    private ResponseEntity<Void> callKeycloakWithBodyRequest(HttpMethod method, String uri, Object body) {
+    @Override
+    public List<KeycloakAccount> getAccountsCreatedAfter(long createdAfter, int size) {
+        log.info("Calling Keycloak to get accounts created after {}",
+                Instant.ofEpochMilli(createdAfter));
+
+        URI uri = UriComponentsBuilder.fromUriString(adminUserUri)
+                .queryParam("createdAfter", createdAfter)
+                .queryParam("max", size)
+                .build().toUri();
+        log.debug("Calling Keycloak to get accounts uri={}", uri);
+
+        KeycloakHttpRequest request = KeycloakHttpRequest.builder()
+                .method(HttpMethod.GET).uri(uri.toString()).body(null).build();
+        ResponseEntity<List<KeycloakAccount>> responseEntity = callKeycloak(request,
+                new ParameterizedTypeReference<>() {
+                });
+
+        List<KeycloakAccount> accounts = responseEntity.getBody();
+
+        if (accounts == null) {
+            log.info("No keycloak accounts found");
+            return Collections.emptyList();
+        }
+        accounts.forEach(account -> log.info("{}", account.toString()));
+        log.info("Fetching accounts from Keycloak successful");
+
+        return accounts.stream()
+                .filter(account -> account.getEmail() != null)
+                .toList();
+    }
+
+    private <T> ResponseEntity<T> callKeycloak(KeycloakHttpRequest req, ParameterizedTypeReference<T> typeRef) {
         try {
-            RestClient.RequestBodySpec request = restClient.method(method)
-                    .uri(uri)
+            RestClient.RequestBodySpec request = restClient.method(req.getMethod())
+                    .uri(req.getUri())
                     .attributes(clientRegistrationId(USER_SERVICE_CLIENT));
 
-            if (body != null) {
-                request.body(body);
+            if (req.getBody() != null) {
+                request.body(req.getBody());
             }
 
             return request.retrieve()
-                    .toBodilessEntity();
+                    .toEntity(typeRef);
         } catch (HttpStatusCodeException exception) {
             throw catchRestClientException(exception);
         }

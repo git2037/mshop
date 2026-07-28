@@ -12,6 +12,16 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class KeycloakAccount {
+    private String id;
     private String email;
     private String password;
+    private Long createdTimestamp;
+
+    @Override
+    public String toString() {
+        return "KeycloakAccount{" +
+                "id='" + id + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
 }
