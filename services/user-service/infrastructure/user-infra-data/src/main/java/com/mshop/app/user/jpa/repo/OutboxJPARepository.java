@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface OutboxJPARepository extends JpaRepository<OutboxEventEntity, String> {
 
-    List<OutboxEventEntity> findAllBySentAtIsNullOrderByCreatedAtDesc(Pageable pageable);
+    List<OutboxEventEntity> findAllBySentAtIsNullOrderByCreatedAtAsc(Pageable pageable);
 }

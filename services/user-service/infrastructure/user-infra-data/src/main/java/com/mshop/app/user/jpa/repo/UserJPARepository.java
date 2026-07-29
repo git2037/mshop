@@ -16,4 +16,6 @@ public interface UserJPARepository extends JpaRepository<UserEntity, String>, Jp
     boolean existsByIdAndDeletedIsNull(String userId);
 
     List<UserEntity> findByKeycloakIdIn(List<String> keycloakIds);
+
+    Optional<UserEntity> findByKeycloakId(String keycloakId);
 }

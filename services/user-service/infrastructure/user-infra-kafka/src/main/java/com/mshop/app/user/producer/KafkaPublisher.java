@@ -5,9 +5,12 @@ import com.mshop.app.common.core.config.DBObjectMapper;
 import com.mshop.app.kafka.event.Event;
 import com.mshop.app.kafka.producer.KafkaEventProducer;
 import com.mshop.app.user.constant.UserEventType;
+import com.mshop.app.user.event.DomainEvent;
 import com.mshop.app.user.event.EventPublisher;
 import com.mshop.app.user.model.OutboxEvent;
-import com.mshop.app.user.payload.KeycloakDeletedPayload;
+import com.mshop.app.user.payload.KeycloakDeleteEvent;
+import com.mshop.app.user.payload.KeycloakDisableEvent;
+import com.mshop.app.user.payload.KeycloakEnableEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,13 +36,12 @@ public class KafkaPublisher implements EventPublisher {
         UserEventType userEventType = UserEventType.fromString(outboxEvent.getEventType());
         ObjectMapper om = DBObjectMapper.getObjectMapper();
 
-        switch (userEventType) {
-            case KEYCLOAK_USER_DELETED -> {
-                KeycloakDeletedPayload payload = om.convertValue(outboxEvent.getPayload(), KeycloakDeletedPayload.class);
-                return Event.create(userEventType.name(), outboxEvent.getObjectId(), payload);
-            }
+        DomainEvent event = switch (userEventType) {
+            case KEYCLOAK_USER_DELETED -> om.convertValue(outboxEvent.getPayload(), KeycloakDeleteEvent.class);
+            case ENABLE_USER -> om.convertValue(outboxEvent.getPayload(), KeycloakEnableEvent.class);
+            case DISABLE_USER -> om.convertValue(outboxEvent.getPayload(), KeycloakDisableEvent.class);
+        };
 
-            default -> throw new IllegalArgumentException("invalid event type");
-        }
+        return Event.create(userEventType.name(), outboxEvent.getObjectId(), event);
     }
 }

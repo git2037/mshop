@@ -12,12 +12,12 @@ import org.springframework.kafka.annotation.RetryableTopic;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.stereotype.Component;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
-public class UserConsumer {
+public class KeycloakUserEnableConsumer {
 
-    private final KafkaEventConsumer  kafkaEventConsumer;
+    private final KafkaEventConsumer kafkaEventConsumer;
 
     @RetryableTopic(
             attempts = "3",
