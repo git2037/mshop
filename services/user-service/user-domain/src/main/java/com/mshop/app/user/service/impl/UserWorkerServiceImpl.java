@@ -1,17 +1,13 @@
 package com.mshop.app.user.service.impl;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mshop.app.common.core.anotation.ConditionalOnKafkaEnabled;
-import com.mshop.app.common.core.config.DBObjectMapper;
-import com.mshop.app.user.constant.UserEventType;
 import com.mshop.app.user.event.EventPublisher;
+import com.mshop.app.user.util.OutboxEventFactory;
 import com.mshop.app.user.exception.UserCode;
 import com.mshop.app.user.exception.UserJobFoundException;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.OutboxEvent;
 import com.mshop.app.user.model.UserJob;
-import com.mshop.app.user.payload.KeycloakDeletedPayload;
 import com.mshop.app.user.repository.KeycloakRepository;
 import com.mshop.app.user.repository.OutboxRepository;
 import com.mshop.app.user.repository.UserJobRepository;
@@ -22,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @RequiredArgsConstructor
@@ -36,6 +31,7 @@ public class UserWorkerServiceImpl implements UserWorkerService {
     private final KeycloakRepository keycloakRepository;
     private final OutboxRepository outboxRepository;
     private final EventPublisher eventPublisher;
+    private final OutboxEventFactory outboxEventFactory;
 
     private static final int KEYCLOAK_MAX_RESULTS = 100;
     private static final String SYNC_MISSING_PROFILES_JOB_NAME = "sync-missing-profiles";
@@ -45,7 +41,6 @@ public class UserWorkerServiceImpl implements UserWorkerService {
     public void removeAccountNotExistInDB() {
         UserJob syncMissingProfilesJob = getSyncMissingJobOrThrow();
         Long lastProcessedTime = syncMissingProfilesJob.getLastProcessedTime();
-        ObjectMapper om = DBObjectMapper.getObjectMapper();
 
         List<KeycloakAccount> accounts = keycloakRepository
                 .getAccountsCreatedAfter(lastProcessedTime, KEYCLOAK_MAX_RESULTS);
@@ -57,7 +52,7 @@ public class UserWorkerServiceImpl implements UserWorkerService {
 
         List<String> missingKeycloakIds = getMissingKeycloakIds(accounts);
         List<OutboxEvent> outboxEvents = missingKeycloakIds.stream()
-                .map(keycloakId -> createKeycloakDeleteEvent(keycloakId, om))
+                .map(outboxEventFactory::keycloakDeleted)
                 .toList();
         outboxRepository.saveAll(outboxEvents);
 
@@ -72,19 +67,6 @@ public class UserWorkerServiceImpl implements UserWorkerService {
             eventPublisher.send(outboxEvent);
             markOutboxEventSent(outboxEvent);
         });
-    }
-
-    private OutboxEvent createKeycloakDeleteEvent(String keycloakId, ObjectMapper om) {
-        KeycloakDeletedPayload payload = new KeycloakDeletedPayload(keycloakId);
-        Map<String, Object> payloadMap = om.convertValue(payload, new TypeReference<>() {
-        });
-
-        return OutboxEvent.builder()
-                .eventType(UserEventType.KEYCLOAK_USER_DELETED.name())
-                .objectId(keycloakId)
-                .payload(payloadMap)
-                .retryCount(0)
-                .build();
     }
 
     private UserJob getSyncMissingJobOrThrow() {

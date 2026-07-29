@@ -19,4 +19,6 @@ public interface UserService {
     void disableUser(String id);
 
     void enableUser(String id);
+
+    User findByKeycloakId(String keycloakId);
 }

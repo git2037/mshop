@@ -1,11 +1,10 @@
 package com.mshop.app.user.model;
 
 import com.mshop.app.common.core.response.BaseDto;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.Instant;
 
 @SuperBuilder
 @Getter
@@ -19,5 +18,6 @@ public class User extends BaseDto {
 
     private String phoneNumber;
 
-    private Instant keycloakDisabled;
+    @Builder.Default
+    private Integer version = 0;
 }

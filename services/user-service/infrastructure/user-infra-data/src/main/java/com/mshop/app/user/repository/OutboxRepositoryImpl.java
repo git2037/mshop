@@ -32,19 +32,29 @@ public class OutboxRepositoryImpl implements OutboxRepository {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OutboxEvent> getEventNotSent(int size) {
         log.info("Fetching unsent outbox events");
         Pageable pageable = PageRequest.of(0, size);
-        return outboxJPARepository.findAllBySentAtIsNullOrderByCreatedAtDesc(pageable)
+        return outboxJPARepository.findAllBySentAtIsNullOrderByCreatedAtAsc(pageable)
                 .stream().map(outboxMapper::toDto)
                 .toList();
     }
 
     @Override
+    @Transactional
     public void markSent(OutboxEvent outboxEvent) {
         log.info("Marked outbox event id={} as SENT", outboxEvent.getId());
         OutboxEventEntity entity = outboxMapper.toEntity(outboxEvent);
         entity.setSentAt(Instant.now());
+        outboxJPARepository.save(entity);
+    }
+
+    @Override
+    @Transactional
+    public void save(OutboxEvent outboxEvent) {
+        log.info("Save event to outbox table");
+        OutboxEventEntity entity = outboxMapper.toEntity(outboxEvent);
         outboxJPARepository.save(entity);
     }
 }

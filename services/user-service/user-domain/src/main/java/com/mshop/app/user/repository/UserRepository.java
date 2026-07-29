@@ -23,4 +23,6 @@ public interface UserRepository {
     User update(User user);
 
     Set<String> findKeycloakIdIn(List<String> keycloakIds);
+
+    Optional<User> findByKeycloakId(String keycloakId);
 }

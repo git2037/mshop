@@ -3,7 +3,7 @@ package com.mshop.app.user.consumer;
 import com.mshop.app.kafka.consumer.EventHandler;
 import com.mshop.app.kafka.event.Event;
 import com.mshop.app.user.constant.UserEventType;
-import com.mshop.app.user.payload.KeycloakDeletedPayload;
+import com.mshop.app.user.payload.KeycloakDeleteEvent;
 import com.mshop.app.user.repository.KeycloakRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Slf4j
 @RequiredArgsConstructor
-public class KeycloakUserDeletedHandler implements EventHandler<KeycloakDeletedPayload> {
+public class KeycloakUserDeleteHandler implements EventHandler<KeycloakDeleteEvent> {
 
     private final KeycloakRepository keycloakRepository;
 
@@ -22,14 +22,15 @@ public class KeycloakUserDeletedHandler implements EventHandler<KeycloakDeletedP
     }
 
     @Override
-    public Class<KeycloakDeletedPayload> payloadType() {
-        return KeycloakDeletedPayload.class;
+    public Class<KeycloakDeleteEvent> payloadType() {
+        return KeycloakDeleteEvent.class;
     }
 
     @Override
-    public void handle(Event<KeycloakDeletedPayload> event) {
+    public void handle(Event<KeycloakDeleteEvent> event) {
+        log.info("Received keycloak delete account event id={}", event.getEventId());
         String keycloakId = event.getPayload().getKeycloakId();
         keycloakRepository.deleteAccount(keycloakId);
-        log.info("Deleted keycloak account id={} successfully", keycloakId);
+        log.info("Successfully processed delete account event id={}", event.getEventId());
     }
 }

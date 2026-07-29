@@ -114,4 +114,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .map(UserEntity::getKeycloakId)
                 .collect(Collectors.toSet());
     }
+
+    @Override
+    public Optional<User> findByKeycloakId(String keycloakId) {
+        return userJPARepository.findByKeycloakId(keycloakId).map(mapper::toUser);
+    }
 }

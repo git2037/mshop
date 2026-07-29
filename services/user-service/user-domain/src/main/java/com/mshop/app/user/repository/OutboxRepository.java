@@ -10,4 +10,6 @@ public interface OutboxRepository {
     List<OutboxEvent> getEventNotSent(int size);
 
     void markSent(OutboxEvent outboxEvent);
+
+    void save(OutboxEvent outboxEvent);
 }

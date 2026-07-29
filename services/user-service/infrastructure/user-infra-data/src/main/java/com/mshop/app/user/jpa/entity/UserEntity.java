@@ -9,8 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-
-import java.time.Instant;
+import org.hibernate.annotations.ColumnDefault;
 
 @Getter
 @Setter
@@ -33,6 +32,7 @@ public class UserEntity extends BaseEntity {
     @Column(name = "phone_number", length = 12)
     private String phoneNumber;
 
-    @Column(name = "keycloak_disabled")
-    private Instant keycloakDisabled;
+    @ColumnDefault("0")
+    @Column(name = "version", nullable = false)
+    private Integer version;
 }
