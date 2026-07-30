@@ -3,6 +3,9 @@ package com.mshop.app.user.rest;
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
+import com.mshop.app.security.anotation.IsAdmin;
+import com.mshop.app.security.anotation.RequireAuthenticate;
+import com.mshop.app.security.service.AuthenticationService;
 import com.mshop.app.user.mapper.RequestMapper;
 import com.mshop.app.user.model.KeycloakAccount;
 import com.mshop.app.user.model.User;
@@ -17,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -40,9 +42,11 @@ public class UserController {
     private final AuthService authService;
     private final UserSearchConfig searchConfig;
     private final UserService userservice;
+    private final AuthenticationService authenticationService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
+    @IsAdmin
     public ApiResponse<List<User>> getAllUsers(@RequestParam(required = false, name = "sort") List<String> sort,
                                                @RequestParam Map<String, String> filter) {
         Query query = QueryParamParser.parseQueryParam(filter, sort, searchConfig);
@@ -51,7 +55,31 @@ public class UserController {
         List<User> users = userservice.findAll(query);
         log.info("Successfully retrieved user list.");
 
-        return ApiResponse.buidSuccessResponse("Users fetched successfully", users);
+        return ApiResponse.buildSuccessResponse("Users fetched successfully", users);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @IsAdmin
+    public ApiResponse<User> getUserById(@PathVariable("id") String userId) {
+        log.info("Getting user by id: {}", userId);
+        User user = userservice.findById(userId);
+        log.info("Successfully retrieved user by id: {}", userId);
+
+        return ApiResponse.buildSuccessResponse("Get user information successfully", user);
+    }
+
+    @GetMapping("/me")
+    @ResponseStatus(HttpStatus.OK)
+    @RequireAuthenticate
+    public ApiResponse<User> getCurrentUser() {
+        String keycloakId = authenticationService.getCurrentUserId();
+
+        log.info("Getting user by Keycloak id: {}", keycloakId);
+        User user = userservice.findByKeycloakId(keycloakId);
+        log.info("Successfully retrieved user by Keycloak id: {}", keycloakId);
+
+        return ApiResponse.buildSuccessResponse("Get user information successfully", user);
     }
 
     @PostMapping
@@ -64,43 +92,43 @@ public class UserController {
         User createdUser = authService.register(user, account);
         log.info("Successfully created user");
 
-        return ApiResponse.buidSuccessResponse("Create user successfully", createdUser);
+        return ApiResponse.buildSuccessResponse("Create user successfully", createdUser);
     }
 
-    @PatchMapping
+    @PutMapping
     @ResponseStatus(HttpStatus.OK)
+    @RequireAuthenticate
     public ApiResponse<User> update(@RequestBody @Valid UserUpdateRequest request) {
-        // TODO: integrate Spring Security (JWT).
-        //       Get current user from token
-        //       Remove dependency on client-provided in UserUpdateRequest
-        String id = "9c90b0f5-1bf5-4181-870a-3897fa280cc8";
+        String keycloakId = authenticationService.getCurrentUserId();
 
         User user = requestMapper.toUser(request);
 
-        log.info("Updating user with id={}", id);
-        User userUpdated = userservice.updateProfile(id, user);
+        log.info("Updating user with keycloak id={}", keycloakId);
+        User userUpdated = userservice.updateProfile(keycloakId, user);
         log.info("Successfully updated user");
 
-        return ApiResponse.buidSuccessResponse("Update user successfully", userUpdated);
+        return ApiResponse.buildSuccessResponse("Update user successfully", userUpdated);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @IsAdmin
     public ApiResponse<Void> implementSoftDelete(@PathVariable("id") String userId) {
         log.info("Implementing soft-delete user with id={}", userId);
         userservice.disableUser(userId);
         log.info("Successfully implementing soft-delete user");
 
-        return ApiResponse.buidSuccessResponse("Soft-delete user successfully", null);
+        return ApiResponse.buildSuccessResponse("Soft-delete user successfully", null);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
+    @IsAdmin
     public ApiResponse<Void> activeUser(@PathVariable("id") String userId) {
         log.info("Starting activate user with id={}", userId);
         userservice.enableUser(userId);
         log.info("Successfully activated user");
 
-        return ApiResponse.buidSuccessResponse("Enable user successfully", null);
+        return ApiResponse.buildSuccessResponse("Enable user successfully", null);
     }
 }
