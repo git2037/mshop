@@ -56,12 +56,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateProfile(String userId, User user) {
-        if (userRepository.existsActiveUserById(userId)) {
-            return userRepository.update(userId, user);
-        } else {
-            throw throwUserWithIdNotFound(userId);
-        }
+    public User updateProfile(String keycloakId, User user) {
+        User userInDB = userRepository.findByKeycloakId(keycloakId)
+                .orElseThrow(() -> throwUserWithKeycloakIdNotFound(keycloakId));
+
+        return userRepository.update(userInDB.getId(), user);
     }
 
     @Override
@@ -109,14 +108,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findByKeycloakId(String keycloakId) {
         return userRepository.findByKeycloakId(keycloakId)
-                .orElseThrow(() -> {
-                    log.warn("User with keycloak id={} not found", keycloakId);
-                    return new UserNotFoundException(UserCode.USER_NOT_FOUND);
-                });
+                .orElseThrow(() -> throwUserWithKeycloakIdNotFound(keycloakId));
     }
 
     private UserNotFoundException throwUserWithIdNotFound(String userId) {
         log.warn("User with id {} not found", userId);
+        return new UserNotFoundException(UserCode.USER_NOT_FOUND);
+    }
+
+    private UserNotFoundException throwUserWithKeycloakIdNotFound(String keycloakId) {
+        log.warn("User with Keycloak id {} not found", keycloakId);
         return new UserNotFoundException(UserCode.USER_NOT_FOUND);
     }
 

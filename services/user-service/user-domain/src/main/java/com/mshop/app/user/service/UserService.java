@@ -12,7 +12,7 @@ public interface UserService {
 
     List<User> findAll(Query request);
 
-    User updateProfile(String userId, User user);
+    User updateProfile(String keycloakId, User user);
 
     User findById(String id);
 
