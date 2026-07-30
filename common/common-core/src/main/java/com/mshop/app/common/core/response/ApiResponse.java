@@ -15,7 +15,7 @@ public class ApiResponse<T> {
     private T data;
     private Map<String, Object> meta;
 
-    public static <T> ApiResponse<T> buidSuccessResponse(String message, T data, Map<String, Object> metadata) {
+    public static <T> ApiResponse<T> buildSuccessResponse(String message, T data, Map<String, Object> metadata) {
         return ApiResponse.<T>builder()
                 .message(message)
                 .data(data)
@@ -23,7 +23,7 @@ public class ApiResponse<T> {
                 .build();
     }
 
-    public static <T> ApiResponse<T> buidSuccessResponse(String message, T data) {
+    public static <T> ApiResponse<T> buildSuccessResponse(String message, T data) {
         return ApiResponse.<T>builder()
                 .message(message)
                 .data(data)
