@@ -1,4 +1,4 @@
-package com.mshop.app.user.validator;
+package com.mshop.app.common.core.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 public class NotBlankIfPresentValidator implements ConstraintValidator<NotBlankIfPresent, String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        if (value == null || value.isBlank())
+        if (value == null)
             return true;
 
         return !value.isBlank();

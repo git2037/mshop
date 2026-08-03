@@ -1,4 +1,4 @@
-package com.mshop.app.user.validator;
+package com.mshop.app.common.core.validator;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 public @interface NotBlankIfPresent {
-    String message() default "FULL_NAME_NOT_BLANK";
+    String message() default "Field must not be blank if present";
 
     Class<?>[] groups() default {};
 
