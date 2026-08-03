@@ -1,5 +1,6 @@
 package com.mshop.app.category.exception;
 
+import com.mshop.app.ProductCode;
 import com.mshop.app.common.core.exception.SystemCode;
 import com.mshop.app.common.core.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +26,8 @@ public class CategoryExceptionHandler {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
 
         for (FieldError fieldError : fieldErrors) {
-            CategoryErrorCode categoryErrorCode = CategoryErrorCode.fromName(fieldError.getDefaultMessage());
-            errors.put(fieldError.getField(), categoryErrorCode.getMessage());
+            ProductCode productCode = ProductCode.fromName(fieldError.getDefaultMessage());
+            errors.put(fieldError.getField(), productCode.getMessage());
         }
 
         SystemCode errorCode = SystemCode.VALIDATION_ERROR;

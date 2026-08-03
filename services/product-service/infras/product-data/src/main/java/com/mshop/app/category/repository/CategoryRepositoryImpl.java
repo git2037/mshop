@@ -1,7 +1,7 @@
 package com.mshop.app.category.repository;
 
 import com.mshop.app.category.exception.CategoryAlreadyExistException;
-import com.mshop.app.category.exception.CategoryErrorCode;
+import com.mshop.app.ProductCode;
 import com.mshop.app.category.jpa.entity.CategoryEntity;
 import com.mshop.app.category.jpa.repo.CategoryJPARepository;
 import com.mshop.app.category.mapper.CategoryMapper;
@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Repository
 @RequiredArgsConstructor
@@ -51,7 +50,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         } catch (DataIntegrityViolationException exception) {
             log.warn("Category [name={}, code={}, path={}] already exist",
                     category.getName(), category.getCode(), category.getPath(), exception);
-            throw new CategoryAlreadyExistException(CategoryErrorCode.CATEGORY_ALREADY_EXIST);
+            throw new CategoryAlreadyExistException(ProductCode.CATEGORY_ALREADY_EXIST);
         }
     }
 
@@ -90,7 +89,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             categoryJPARepository.updatePathBatch(oldPath, newPath);
         } catch (DataIntegrityViolationException exception) {
             log.error("Path conflict! Moving category[path={}] to an existing path '{}'", oldPath, newPath, exception);
-            throw new CategoryAlreadyExistException(CategoryErrorCode.CATEGORY_ALREADY_EXIST);
+            throw new CategoryAlreadyExistException(ProductCode.CATEGORY_ALREADY_EXIST);
         }
     }
 

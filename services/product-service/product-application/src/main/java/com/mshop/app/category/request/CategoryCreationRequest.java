@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CategoryCreationRequest {
 
-    @NotBlank(message = "NAME_NOT_BLANK")
+    @NotBlank(message = "CATEGORY_NAME_NOT_BLANK")
     private String name;
-    @NotBlank(message = "CODE_NOT_BLANK")
+    @NotBlank(message = "CATEGORY_CODE_NOT_BLANK")
     private String code;
     private String parentId;
 }
