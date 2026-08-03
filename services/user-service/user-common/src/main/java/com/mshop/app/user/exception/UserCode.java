@@ -17,7 +17,7 @@ public enum UserCode implements ErrorCode {
     PASSWORD_MIN_LENGTH("USER_005", "Password length cannot be less than {min} characters"),
     INVALID_PHONE_NUMBER("USER_006", "Phone number must be a valid 10-digit format (e.g., 0912345678)"),
 
-    // bussiness
+    // business
     USER_NOT_FOUND("USER_404", "User not found."),
     USER_ALREADY_EXIST("USER_ALREADY_EXIST", "User already exist."),
 
