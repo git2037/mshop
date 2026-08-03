@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: product-application
+
+  profiles:
+    active: ${ACTIVE_PROFILE:dev}
