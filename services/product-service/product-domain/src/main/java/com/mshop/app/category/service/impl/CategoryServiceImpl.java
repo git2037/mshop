@@ -1,7 +1,7 @@
 package com.mshop.app.category.service.impl;
 
-import com.mshop.app.category.exception.CategoryCanNotMove;
 import com.mshop.app.ProductCode;
+import com.mshop.app.category.exception.CategoryCanNotMove;
 import com.mshop.app.category.exception.CategoryNotFoundException;
 import com.mshop.app.category.model.Category;
 import com.mshop.app.category.repository.CategoryRepository;
@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Supplier;
 
 @Service
 @RequiredArgsConstructor
@@ -40,36 +41,31 @@ public class CategoryServiceImpl implements CategoryService {
         category.setParentId(hasParent ? parentId : null);
         category.setPath(path);
 
-        log.info("Save category[name={}, code={}, parentId={}, path={}] to DB", category.getName(), code, parentId, path);
+        log.info("Save category[name={}, code={}, parentId={}, path={}]", category.getName(), code, parentId, path);
         return categoryRepository.save(category);
     }
 
     @Override
     public List<Category> getAll(Query query) {
-        log.info("Get all categories from DB");
         return categoryRepository.findAll(query);
     }
 
     @Override
     public List<Category> getAllRootCategories() {
-        log.info("Get all root categories from DB");
         return categoryRepository.findAllByParentIdIsNullAndDeletedIsNull();
     }
 
     @Override
     public List<Category> getAllChildrenCategories(String parentId) {
-        Category category = findByIdAndDeletedIsNull(parentId);
-
-        log.info("Get all children categories of parentId={} from DB", parentId);
+        Category category = findById(parentId);
         return categoryRepository.findAllByPathStartsWithAndDeletedIsNull(category.getPath() + FORWARD_SLASH);
     }
 
     @Override
     public List<Category> getPathToRoot(String childId) {
-        Category category = findByIdAndDeletedIsNull(childId);
-        List<String> paths = extractChainPaths(category.getPath());
+        Category childCategory = findEnableCategoryById(childId);
+        List<String> paths = extractChainPaths(childCategory.getPath());
 
-        log.info("Get category chain from childId={} to root category from DB", childId);
         List<Category> categories = categoryRepository.findAllByPathIn(paths);
 
         return categories.stream()
@@ -80,9 +76,13 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category getCategoryById(String id) {
-        log.info("Get category by id={}", id);
-        return findByIdAndDeletedIsNull(id);
+    public Category getById(String id) {
+        return findById(id);
+    }
+
+    @Override
+    public Category getEnableCategoryById(String id) {
+        return findEnableCategoryById(id);
     }
 
     @Override
@@ -101,7 +101,7 @@ public class CategoryServiceImpl implements CategoryService {
             category.setCode(payloadCode);
         }
 
-        log.info("Update category[id={}, name={}, code={}, path={}] to DB", category.getId(),
+        log.info("Update category[id={}, name={}, code={}, path={}]", category.getId(),
                 category.getName(), category.getCode(), category.getPath());
         return categoryRepository.save(category);
     }
@@ -128,7 +128,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         String oldPath = category.getPath();
         String newPath = parentCategory.getPath() + FORWARD_SLASH + category.getCode();
-        log.info("Update paths for category[id={}] subtree to DB", category.getId());
+        log.info("Update paths for category[id={}] subtree", category.getId());
         categoryRepository.updatePathBatch(oldPath, newPath);
     }
 
@@ -160,28 +160,6 @@ public class CategoryServiceImpl implements CategoryService {
         return parentCategory.getPath() + FORWARD_SLASH + code;
     }
 
-    private Category findById(String id) {
-        log.info("Find category by id={}", id);
-        return getOrThrowNotFoundException(
-                categoryRepository.findById(id), id
-        );
-    }
-
-    private Category findByIdAndDeletedIsNull(String id) {
-        log.info("Find category by id={} and deleted is null", id);
-        return getOrThrowNotFoundException(
-                categoryRepository.findByIdAndDeletedIsNull(id), id
-        );
-    }
-
-    private Category getOrThrowNotFoundException(Optional<Category> categoryOptional, String id) {
-        return categoryOptional.orElseThrow(
-                () -> {
-                    log.warn("Category [id={}] not found]", id);
-                    return new CategoryNotFoundException(ProductCode.CATEGORY_NOT_FOUND);
-                });
-    }
-
     private List<String> extractChainPaths(String path) {
         if (path == null || path.isBlank()) return List.of();
 
@@ -205,5 +183,23 @@ public class CategoryServiceImpl implements CategoryService {
 
     private String createNewPath(String oldPath, String newCode) {
         return oldPath.substring(0, oldPath.lastIndexOf(FORWARD_SLASH) + 1) + newCode;
+    }
+
+    public Category findById(String id) {
+        return findCategory(id,
+                () -> categoryRepository.findById(id));
+    }
+
+    public Category findEnableCategoryById(String id) {
+        return findCategory(id,
+                () -> categoryRepository.findByIdAndDeletedIsNull(id));
+    }
+
+    private Category findCategory(String categoryId, Supplier<Optional<Category>> supplier) {
+        return supplier.get().orElseThrow(
+                () -> {
+                    log.warn("Category [id={}] not found", categoryId);
+                    return new CategoryNotFoundException(ProductCode.CATEGORY_NOT_FOUND);
+                });
     }
 }

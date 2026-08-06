@@ -26,7 +26,7 @@ public class QueryParamParser {
         List<FilterField> allowedSearchField = searchConfig.getSearchableFields();
         List<SortField> allowedSortField = searchConfig.getSortableFields();
         Map<String, String> params = QueryParamValidator.validateParams(queryParams);
-        Pagination pagination = PaginationPaser.parse(params);
+        Pagination pagination = PaginationParser.parse(params);
 
         params = QueryParamValidator.removePaginationParams(params);
 

@@ -1,6 +1,7 @@
 package com.mshop.app.category.exception;
 
 import com.mshop.app.ProductCode;
+import com.mshop.app.common.core.exception.ErrorCode;
 import com.mshop.app.common.core.exception.SystemCode;
 import com.mshop.app.common.core.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,8 @@ public class CategoryExceptionHandler {
     @ExceptionHandler(value = {CategoryNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<Void> handleCategoryNotFoundException(CategoryNotFoundException e) {
-        return ApiResponse.buildFailResponse(e);
+        ErrorCode errorCode = e.getCode();
+        return ApiResponse.buildFailResponse(errorCode.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(value = {CategoryAlreadyExistException.class})

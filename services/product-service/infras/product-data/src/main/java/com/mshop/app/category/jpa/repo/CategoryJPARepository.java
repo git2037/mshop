@@ -30,4 +30,6 @@ public interface CategoryJPARepository extends JpaRepository<CategoryEntity, Str
     @Modifying
     @Query(value = "update CategoryEntity set deleted = null, updatedAt=current_timestamp() where path like concat(:path, '%')")
     void enableBatchByPath(@Param("path") String path);
+
+    boolean existsByIdAndDeletedIsNull(String categoryId);
 }

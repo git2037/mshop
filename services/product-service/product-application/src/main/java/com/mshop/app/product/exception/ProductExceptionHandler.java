@@ -16,4 +16,10 @@ public class ProductExceptionHandler {
     public ApiResponse<Void> handleProductAlreadyExistException(ProductAlreadyExistException e) {
         return ApiResponse.buildFailResponse(e);
     }
+
+    @ExceptionHandler(value = {ProductNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<Void> handleProductNotFoundException(ProductNotFoundException e) {
+        return ApiResponse.buildFailResponse(e);
+    }
 }

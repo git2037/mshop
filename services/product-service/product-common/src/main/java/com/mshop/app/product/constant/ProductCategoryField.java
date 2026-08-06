@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ProductField {
+public enum ProductCategoryField {
     ID("id"),
-    NAME("name"),
-    CREATED_AT("created-at"),
-    DELETED("deleted"),
+    CATEGORY_ID("category-id"),
+    PRODUCT_ID("product-id"),
     ;
 
     private final String field;

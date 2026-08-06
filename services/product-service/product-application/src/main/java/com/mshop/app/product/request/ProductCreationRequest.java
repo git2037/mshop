@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -13,4 +15,6 @@ public class ProductCreationRequest {
     private String name;
 
     private String description;
+
+    private Set<String> categoryIds;
 }
