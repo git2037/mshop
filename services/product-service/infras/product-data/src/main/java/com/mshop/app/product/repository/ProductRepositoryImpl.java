@@ -49,7 +49,7 @@ public class ProductRepositoryImpl implements ProductRepository {
         log.debug("Get all products by query: {}", query);
         Pageable pageable = PaginationParser.parsePageable(query);
 
-        Specification<ProductEntity> specification = getProductSpecification(query.getFilters());
+        Specification<ProductEntity> specification = getProductSpecification(query.getFilters(), false);
 
         Page<ProductEntity> entityPage = productJPARepository.findAll(specification, pageable);
 
@@ -63,7 +63,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<Product> findAllEnableProduct(Query query) {
         Pageable pageable = PaginationParser.parsePageable(query);
 
-        Specification<ProductEntity> specification = getProductSpecification(query.getFilters())
+        Specification<ProductEntity> specification = getProductSpecification(query.getFilters(), true)
                 .and(ProductSpecification.deletedIsNull());
 
         Page<ProductEntity> entityPage = productJPARepository.findAll(specification, pageable);
@@ -85,13 +85,13 @@ public class ProductRepositoryImpl implements ProductRepository {
         return productJPARepository.findByIdAndDeletedIsNull(id).map(productMapper::toDto);
     }
 
-    private Specification<ProductEntity> getProductSpecification(List<FilterCondition> conditions) {
+    private Specification<ProductEntity> getProductSpecification(List<FilterCondition> conditions, boolean filterEnableCategory) {
         Specification<ProductEntity> specification = Specification.unrestricted();
 
         for (FilterCondition condition : conditions) {
             if (condition.getField().equals(CategoryField.PATH.getField())) {
                 specification = specification.and(
-                        ProductSpecification.findByCategoryId(String.valueOf(condition.getValue()))
+                        ProductSpecification.findByCategoryId(String.valueOf(condition.getValue()), filterEnableCategory)
                 );
                 continue;
             }
