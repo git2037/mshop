@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface ProductRepository {
 
-    Product create(Product product);
+    Product save(Product product);
 
     List<Product> findAll(Query query);
 
@@ -17,4 +17,10 @@ public interface ProductRepository {
     Optional<Product> findById(String id);
 
     Optional<Product> findByIdAndDeletedIsNull(String id);
+
+    boolean existById(String id);
+
+    void disable(String productId);
+
+    void enable(String productId);
 }

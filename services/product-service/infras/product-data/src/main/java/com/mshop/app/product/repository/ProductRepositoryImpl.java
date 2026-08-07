@@ -34,7 +34,7 @@ public class ProductRepositoryImpl implements ProductRepository {
 
     @Override
     @Transactional
-    public Product create(Product product) {
+    public Product save(Product product) {
         try {
             return productMapper.toDto(productJPARepository.saveAndFlush(productMapper.toEntity(product)));
         } catch (DataIntegrityViolationException exception) {
@@ -83,6 +83,23 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional(readOnly = true)
     public Optional<Product> findByIdAndDeletedIsNull(String id) {
         return productJPARepository.findByIdAndDeletedIsNull(id).map(productMapper::toDto);
+    }
+
+    @Override
+    public boolean existById(String id) {
+        return productJPARepository.existsById(id);
+    }
+
+    @Override
+    @Transactional
+    public void disable(String productId) {
+        productJPARepository.disable(productId);
+    }
+
+    @Override
+    @Transactional
+    public void enable(String productId) {
+        productJPARepository.enable(productId);
     }
 
     private Specification<ProductEntity> getProductSpecification(List<FilterCondition> conditions, boolean filterEnableCategory) {

@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CategoryJPARepository extends JpaRepository<CategoryEntity, String>, JpaSpecificationExecutor<CategoryEntity> {
     Optional<CategoryEntity> findByIdAndDeletedIsNull(String id);
@@ -31,5 +32,16 @@ public interface CategoryJPARepository extends JpaRepository<CategoryEntity, Str
     @Query(value = "update CategoryEntity set deleted = null, updatedAt=current_timestamp() where path like concat(:path, '%')")
     void enableBatchByPath(@Param("path") String path);
 
-    boolean existsByIdAndDeletedIsNull(String categoryId);
+    @Query(value = """
+            select c.id
+            from CategoryEntity c
+            where c.parentId is not null
+            and c.id in (:ids)
+            and c.id not in (
+                select distinct child.parentId
+                from CategoryEntity child
+                where child.parentId is not null
+            )
+            """)
+    Set<String> findLeafNodes(@Param("ids") Set<String> categoryIds);
 }

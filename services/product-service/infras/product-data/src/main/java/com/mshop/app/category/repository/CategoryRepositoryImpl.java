@@ -117,17 +117,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
     }
 
     @Override
-    public List<Category> findAllByIds(Set<String> categoryIds) {
-        return jpaRepository.findAllById(categoryIds).stream().map(mapper::toDto).toList();
-    }
-
-    @Override
-    public boolean existById(String categoryId) {
-        return jpaRepository.existsById(categoryId);
-    }
-
-    @Override
-    public boolean existByIdAndDeletedIsNull(String categoryId) {
-        return jpaRepository.existsByIdAndDeletedIsNull(categoryId);
+    public Set<String> findLeafNodes(Set<String> categoryIds) {
+        return jpaRepository.findLeafNodes(categoryIds);
     }
 }

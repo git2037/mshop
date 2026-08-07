@@ -29,9 +29,5 @@ public interface CategoryRepository {
 
     List<Category> findAllByPathStartsWithAndDeletedIsNull(String path);
 
-    List<Category> findAllByIds(Set<String> categoryIds);
-
-    boolean existById(String categoryId);
-
-    boolean existByIdAndDeletedIsNull(String categoryId);
+    Set<String> findLeafNodes(Set<String> categoryIds);
 }

@@ -48,9 +48,16 @@ public class CategoryExceptionHandler {
         return ApiResponse.buildFailResponse(e);
     }
 
-    @ExceptionHandler(value = {CategoryCanNotMove.class})
+    @ExceptionHandler(value = {CategoryNotMoveException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiResponse<Void> handleCategoryCanNotMove(CategoryCanNotMove e) {
+    public ApiResponse<Void> handleCategoryCanNotMove(CategoryNotMoveException e) {
         return ApiResponse.buildFailResponse(e);
+    }
+
+    @ExceptionHandler(value = {CategoryNotLeafException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleCategoryNotLeafException(CategoryNotLeafException e) {
+        ErrorCode errorCode = e.getCode();
+        return ApiResponse.buildFailResponse(errorCode.getCode(), e.getMessage());
     }
 }

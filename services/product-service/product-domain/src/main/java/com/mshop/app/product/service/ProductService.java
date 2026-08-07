@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 public interface ProductService {
-    Product create(Product product, Set<String> categoryIds);
+    Product create(Product product);
 
     List<Product> getAll(Query query);
 
@@ -16,4 +16,14 @@ public interface ProductService {
     Product getById(String id);
 
     Product getEnableProductById(String id);
+
+    Product update(Product product);
+
+    void addToCategories(String productId, Set<String> categoryIds);
+
+    void removeFromCategories(String productId, Set<String> categoryIds);
+
+    void disable(String productId);
+
+    void enable(String productId);
 }

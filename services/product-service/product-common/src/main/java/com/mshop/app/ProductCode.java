@@ -19,8 +19,11 @@ public enum ProductCode implements ErrorCode {
     CATEGORY_CODE_NOT_BLANK_IF_PRESENT("CATEGORY_004", "Category code must not be blank if present"),
     CATEGORY_PARENT_ID_NOT_BLANK_IF_PRESENT("CATEGORY_005", "Parent id must not be blank if present"),
 
-    CATEGORY_NOT_FOUND("CATEGORY_404", "Category not found"),
     CATEGORY_ALREADY_EXIST("CATEGORY_400", "Category already exist"),
+    CATEGORY_IS_NOT_LEAF("CATEGORY_401", "Category is not a leaf"),
+    CATEGORY_IDS_NOT_EMPTY("CATEGORY_402", "Category id list must not be empty"),
+    CATEGORY_ID_NOT_BLANK("CATEGORY_403", "Category id must not be blank"),
+    CATEGORY_NOT_FOUND("CATEGORY_404", "Category not found"),
     CATEGORY_CAN_NOT_MOVE("CATEGORY_444", "Category cannot move to its own subtree"),
 
     // product code
