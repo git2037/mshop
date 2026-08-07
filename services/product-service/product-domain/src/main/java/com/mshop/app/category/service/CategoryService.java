@@ -17,7 +17,9 @@ public interface CategoryService {
 
     List<Category> getPathToRoot(String childId);
 
-    Category getCategoryById(String id);
+    Category getById(String id);
+
+    Category getEnableCategoryById(String id);
 
     Category update(String categoryId, Category payload);
 

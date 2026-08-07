@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CategoryUpdatingRequest {
-    @NotBlankIfPresent(message = "CODE_NOT_BLANK_IF_PRESENT")
+    @NotBlankIfPresent(message = "CATEGORY_CODE_NOT_BLANK_IF_PRESENT")
     private String code;
-    @NotBlankIfPresent(message = "NAME_NOT_BLANK_IF_PRESENT")
+    @NotBlankIfPresent(message = "CATEGORY_NAME_NOT_BLANK_IF_PRESENT")
     private String name;
 }

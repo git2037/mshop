@@ -5,6 +5,7 @@ import com.mshop.app.category.model.Category;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface CategoryRepository {
 
@@ -27,4 +28,6 @@ public interface CategoryRepository {
     Optional<Category> findByIdAndDeletedIsNull(String id);
 
     List<Category> findAllByPathStartsWithAndDeletedIsNull(String path);
+
+    Set<String> findLeafNodes(Set<String> categoryIds);
 }

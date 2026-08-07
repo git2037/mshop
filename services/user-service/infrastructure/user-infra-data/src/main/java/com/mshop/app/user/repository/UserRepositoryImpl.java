@@ -1,10 +1,8 @@
 package com.mshop.app.user.repository;
 
 import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
-import com.mshop.app.common.core.searching.filter.FilterCondition;
-import com.mshop.app.common.core.searching.model.Pagination;
 import com.mshop.app.common.core.searching.model.Query;
-import com.mshop.app.common.core.searching.sort.SortBuilder;
+import com.mshop.app.common.core.searching.parser.PaginationParser;
 import com.mshop.app.user.exception.UserAlreadyExistsException;
 import com.mshop.app.user.exception.UserCode;
 import com.mshop.app.user.jpa.entity.UserEntity;
@@ -15,9 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,14 +54,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public List<User> findAll(Query query) {
-        Sort sort = SortBuilder.buildSort(query.getSortBy());
-        Pagination pagination = query.getPagination();
-        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getPageSize(), sort);
+        Pageable pageable = PaginationParser.parsePageable(query);
 
-        Specification<UserEntity> specification = Specification.unrestricted();
-        for (FilterCondition condition : query.getFilters()) {
-            specification = specification.and(SpecificationBuilder.buildSpecification(condition));
-        }
+        Specification<UserEntity> specification = SpecificationBuilder
+                .buildSpecification(query.getFilters());
 
         log.info("Fetching user list from database.");
         log.debug("Fetching user list with page: {}, size: {} from db", pageable.getPageNumber(), pageable.getPageSize());

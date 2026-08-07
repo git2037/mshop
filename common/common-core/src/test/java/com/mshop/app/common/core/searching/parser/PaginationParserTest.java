@@ -15,12 +15,12 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-class PaginationPaserTest {
+class PaginationParserTest {
 
     @ParameterizedTest
     @MethodSource(value = "invalidParams")
     void should_throw_exception_when_invalid_exception(Map<String, String> map, ErrorCode expectedCode) {
-        assertThatThrownBy(() -> PaginationPaser.parse(map))
+        assertThatThrownBy(() -> PaginationParser.parse(map))
                 .isInstanceOf(ValidationException.class)
                 .satisfies(e -> {
                     ValidationException validationException = (ValidationException) e;
@@ -39,7 +39,7 @@ class PaginationPaserTest {
     void should_return_pagination_when_valid_param() {
         Map<String, String> params = Map.of("page", "1", "size", "10");
         Pagination pagination = new Pagination(1, 10);
-        Pagination result = PaginationPaser.parse(params);
+        Pagination result = PaginationParser.parse(params);
         assertThat(result.getPage()).isEqualTo(pagination.getPage());
         assertThat(result.getPageSize()).isEqualTo(pagination.getPageSize());
     }

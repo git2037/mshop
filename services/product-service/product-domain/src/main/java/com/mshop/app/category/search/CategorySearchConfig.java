@@ -1,17 +1,17 @@
 package com.mshop.app.category.search;
 
+import com.mshop.app.category.constant.CategoryField;
 import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.filter.FilterField;
 import com.mshop.app.common.core.searching.filter.Operators;
 import com.mshop.app.common.core.searching.sort.SortField;
-import com.mshop.app.category.constant.CategoryField;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.List;
 
-@Service
+@Component("categorySearchConfig")
 public class CategorySearchConfig implements SearchConfig {
 
     @Override

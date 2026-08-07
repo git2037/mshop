@@ -31,7 +31,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(value = {ValidationException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleValidationException(ValidationException ex) {
-        return ApiResponse.buildFailResponse(ex.getCode().getCode(), ex.getMessage());
+        ErrorCode code = ex.getCode();
+        String message = ex.getMessage() == null ? code.getMessage() : ex.getMessage();
+        return ApiResponse.buildFailResponse(code.getCode(), message);
     }
 
     @ExceptionHandler(value = {Exception.class})

@@ -5,6 +5,7 @@ import com.mshop.app.common.core.searching.sort.SortDirection;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Builder
 @Getter
 @Setter
+@ToString
 public class Query {
     private Pagination pagination;
     private Map<String, SortDirection> sortBy;

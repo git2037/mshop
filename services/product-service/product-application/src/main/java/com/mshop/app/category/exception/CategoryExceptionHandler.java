@@ -1,5 +1,7 @@
 package com.mshop.app.category.exception;
 
+import com.mshop.app.ProductCode;
+import com.mshop.app.common.core.exception.ErrorCode;
 import com.mshop.app.common.core.exception.SystemCode;
 import com.mshop.app.common.core.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -25,8 +27,8 @@ public class CategoryExceptionHandler {
         List<FieldError> fieldErrors = e.getBindingResult().getFieldErrors();
 
         for (FieldError fieldError : fieldErrors) {
-            CategoryErrorCode categoryErrorCode = CategoryErrorCode.fromName(fieldError.getDefaultMessage());
-            errors.put(fieldError.getField(), categoryErrorCode.getMessage());
+            ProductCode productCode = ProductCode.fromName(fieldError.getDefaultMessage());
+            errors.put(fieldError.getField(), productCode.getMessage());
         }
 
         SystemCode errorCode = SystemCode.VALIDATION_ERROR;
@@ -36,7 +38,8 @@ public class CategoryExceptionHandler {
     @ExceptionHandler(value = {CategoryNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<Void> handleCategoryNotFoundException(CategoryNotFoundException e) {
-        return ApiResponse.buildFailResponse(e);
+        ErrorCode errorCode = e.getCode();
+        return ApiResponse.buildFailResponse(errorCode.getCode(), e.getMessage());
     }
 
     @ExceptionHandler(value = {CategoryAlreadyExistException.class})
@@ -45,9 +48,16 @@ public class CategoryExceptionHandler {
         return ApiResponse.buildFailResponse(e);
     }
 
-    @ExceptionHandler(value = {CategoryCanNotMove.class})
+    @ExceptionHandler(value = {CategoryNotMoveException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ApiResponse<Void> handleCategoryCanNotMove(CategoryCanNotMove e) {
+    public ApiResponse<Void> handleCategoryCanNotMove(CategoryNotMoveException e) {
         return ApiResponse.buildFailResponse(e);
+    }
+
+    @ExceptionHandler(value = {CategoryNotLeafException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ApiResponse<Void> handleCategoryNotLeafException(CategoryNotLeafException e) {
+        ErrorCode errorCode = e.getCode();
+        return ApiResponse.buildFailResponse(errorCode.getCode(), e.getMessage());
     }
 }

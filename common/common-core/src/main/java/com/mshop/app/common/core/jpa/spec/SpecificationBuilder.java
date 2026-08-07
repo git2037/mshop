@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class SpecificationBuilder {
 
@@ -20,6 +21,13 @@ public class SpecificationBuilder {
         return (root, query, cb) -> toPredicate(cb, root, condition);
     }
 
+    public static <T> Specification<T> buildSpecification(List<FilterCondition> conditions) {
+        Specification<T> specification = Specification.unrestricted();
+        for (FilterCondition condition : conditions) {
+            specification = specification.and(SpecificationBuilder.buildSpecification(condition));
+        }
+        return specification;
+    }
 
     private static Predicate toPredicate(CriteriaBuilder cb, Root<?> root, FilterCondition condition) {
         if (condition == null)
