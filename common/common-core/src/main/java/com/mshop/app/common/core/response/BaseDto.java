@@ -12,8 +12,6 @@ import java.time.Instant;
 public class BaseDto {
     String id;
     Instant createdAt;
-    String createdBy;
     Instant updatedAt;
-    String updatedBy;
     Instant deleted;
 }
