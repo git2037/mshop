@@ -25,3 +25,21 @@ databaseChangeLog:
         - sqlFile:
             dbms: mysql
             path: classpath:/changelog/source/03-drop-created_by-and-updated_by-fields.sql
+
+  - changeSet:
+      id: 04-modify-attribute_value-table
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/changelog/source/04-modify-attribute_value-table.sql
+
+  - changeSet:
+      id: 05-modify-attribute-table
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/changelog/source/05-modify-attribute-table.sql
