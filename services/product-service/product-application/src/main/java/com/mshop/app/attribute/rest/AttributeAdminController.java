@@ -3,26 +3,44 @@ package com.mshop.app.attribute.rest;
 import com.mshop.app.attribute.mapper.AttributeRequestMapper;
 import com.mshop.app.attribute.model.Attribute;
 import com.mshop.app.attribute.request.CreateAttributeRequest;
+import com.mshop.app.attribute.search.AttributeSearchConfig;
 import com.mshop.app.attribute.service.AttributeService;
 import com.mshop.app.common.core.response.ApiResponse;
+import com.mshop.app.common.core.searching.model.Query;
+import com.mshop.app.common.core.searching.parser.QueryParamParser;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequestMapping("api/v1/admin/attributes")
 @RestController
-@RequiredArgsConstructor
 public class AttributeAdminController {
 
     private final AttributeService attributeService;
     private final AttributeRequestMapper attributeRequestMapper;
+    private final AttributeSearchConfig  attributeSearchConfig;
+
+    public AttributeAdminController(AttributeService attributeService,
+                                    AttributeRequestMapper attributeRequestMapper,
+                                    @Qualifier("attributeSearchConfig") AttributeSearchConfig attributeSearchConfig) {
+        this.attributeService = attributeService;
+        this.attributeRequestMapper = attributeRequestMapper;
+        this.attributeSearchConfig = attributeSearchConfig;
+    }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,4 +50,19 @@ public class AttributeAdminController {
                 attributeService.create(attribute));
     }
 
+    @GetMapping
+    public ApiResponse<List<Attribute>> getAttributes(@RequestParam(required = false, name = "sort") List<String> sort,
+                                                      @RequestParam Map<String, String> filter) {
+        Query query = QueryParamParser.parseQueryParam(filter, sort, attributeSearchConfig);
+
+        log.debug("Get attributes with query: {}", query);
+        return ApiResponse.buildSuccessResponse("Attributes fetched successfully",
+                attributeService.getAttributes(query));
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponse<Attribute> getAttributeById(@PathVariable("id") String attributeId) {
+        return ApiResponse.buildSuccessResponse("Attribute successfully fetched",
+                attributeService.getAttributeById(attributeId));
+    }
 }

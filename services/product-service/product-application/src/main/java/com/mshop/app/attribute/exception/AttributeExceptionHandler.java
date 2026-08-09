@@ -1,7 +1,5 @@
 package com.mshop.app.attribute.exception;
 
-import com.mshop.app.common.core.exception.AppException;
-import com.mshop.app.common.core.exception.ErrorCode;
 import com.mshop.app.common.core.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,13 +11,13 @@ public class AttributeExceptionHandler {
 
     @ExceptionHandler(value = {AttributeAlreadyExistException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Void> handleAttributeAlreadyExistException(AttributeAlreadyExistException e) {
-        ErrorCode errorCode = e.getCode();
-        String message = getMessage(errorCode, e);
-        return ApiResponse.buildFailResponse(errorCode.getCode(), message);
+    public ApiResponse<Void> handleAttributeAlreadyExistException(AttributeAlreadyExistException exception) {
+        return ApiResponse.buildFailResponse(exception);
     }
 
-    private String getMessage(ErrorCode errorCode, AppException exception) {
-        return exception.getMessage() == null ? errorCode.getMessage() : exception.getMessage();
+    @ExceptionHandler(value = {AttributeNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<Void> handleAttributeNotFoundException(AttributeNotFoundException exception) {
+        return ApiResponse.buildFailResponse(exception);
     }
 }

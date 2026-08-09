@@ -61,8 +61,8 @@ public class CategoryController {
         Query query = QueryParamParser.parseQueryParam(filter, sort, searchConfig);
 
         log.debug("Get categories with query: {}", query);
-        List<Category> users = categoryService.getAll(query);
-        return ApiResponse.buildSuccessResponse("Categories fetched successfully", users);
+        List<Category> categories = categoryService.getAll(query);
+        return ApiResponse.buildSuccessResponse("Categories fetched successfully", categories);
     }
 
     @GetMapping("/roots")

@@ -39,6 +39,7 @@ public enum ProductServiceCode implements ErrorCode {
     ATTRIBUTE_VALUE_INVALID("ATTRIBUTE_003", "Invalid attribute value. Allowed values are: {values}"),
 
     ATTRIBUTE_ALREADY_EXIST("ATTRIBUTE_400", "Attribute already exist"),
+    ATTRIBUTE_NOT_FOUND("ATTRIBUTE_404", "Attribute not found"),
 
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),
