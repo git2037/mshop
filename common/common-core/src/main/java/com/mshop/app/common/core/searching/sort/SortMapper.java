@@ -33,7 +33,7 @@ public class SortMapper {
     }
 
     private static SortField validateDirection(String sortParam) {
-        String[] part = sortParam.split(",");
+        String[] part = sortParam.split(":");
         int lengthPart = part.length;
 
         if (lengthPart > 2 || lengthPart == 0)
