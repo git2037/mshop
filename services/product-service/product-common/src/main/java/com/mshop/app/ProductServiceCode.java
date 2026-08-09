@@ -10,7 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 @Getter
 @AllArgsConstructor
 @Slf4j
-public enum ProductCode implements ErrorCode {
+public enum ProductServiceCode implements ErrorCode {
 
     //category code
     CATEGORY_NAME_NOT_BLANK("CATEGORY_001", "Category name can not blank"),
@@ -32,6 +32,14 @@ public enum ProductCode implements ErrorCode {
     PRODUCT_NOT_FOUND("PRODUCT_404", "Product not found"),
     PRODUCT_ALREADY_EXIST("PRODUCT_400", "Product already exist"),
 
+    // attribute code
+    ATTRIBUTE_NAME_NOT_BLANK("ATTRIBUTE_001", "Attribute name can not blank"),
+    ATTRIBUTE_CODE_NOT_BLANK("ATTRIBUTE_002", "Attribute code can not blank"),
+    ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_003", "Attribute value can not blank"),
+    ATTRIBUTE_VALUE_INVALID("ATTRIBUTE_003", "Invalid attribute value. Allowed values are: {values}"),
+
+    ATTRIBUTE_ALREADY_EXIST("ATTRIBUTE_400", "Attribute already exist"),
+
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),
     ;
@@ -39,12 +47,12 @@ public enum ProductCode implements ErrorCode {
     private final String code;
     private final String message;
 
-    public static ProductCode fromName(String codeName) {
+    public static ProductServiceCode fromName(String codeName) {
         try {
-            return ProductCode.valueOf(codeName);
+            return ProductServiceCode.valueOf(codeName);
         } catch (IllegalArgumentException e) {
             log.error("Failed to convert parameter to category code Enum. Invalid value provided: '{}'", codeName);
-            throw new SystemException(ProductCode.INVALID_PRODUCT_CODE);
+            throw new SystemException(ProductServiceCode.INVALID_PRODUCT_CODE);
         }
     }
 }

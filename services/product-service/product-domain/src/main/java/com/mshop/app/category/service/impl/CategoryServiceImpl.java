@@ -1,6 +1,6 @@
 package com.mshop.app.category.service.impl;
 
-import com.mshop.app.ProductCode;
+import com.mshop.app.ProductServiceCode;
 import com.mshop.app.category.exception.CategoryNotMoveException;
 import com.mshop.app.category.exception.CategoryNotFoundException;
 import com.mshop.app.category.model.Category;
@@ -118,7 +118,7 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (parentCategory.getPath().startsWith(category.getPath())) {
             log.warn("Can not move category[id={}] to its own subtree", categoryId);
-            throw new CategoryNotMoveException(ProductCode.CATEGORY_CAN_NOT_MOVE);
+            throw new CategoryNotMoveException(ProductServiceCode.CATEGORY_CAN_NOT_MOVE);
         }
 
         log.info("Move category[id={}, path={}, parentId={}] to parentId={}", categoryId, category.getPath(),
@@ -199,7 +199,7 @@ public class CategoryServiceImpl implements CategoryService {
         return supplier.get().orElseThrow(
                 () -> {
                     log.warn("Category [id={}] not found", categoryId);
-                    return new CategoryNotFoundException(ProductCode.CATEGORY_NOT_FOUND);
+                    return new CategoryNotFoundException(ProductServiceCode.CATEGORY_NOT_FOUND);
                 });
     }
 }

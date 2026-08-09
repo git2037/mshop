@@ -1,6 +1,6 @@
 package com.mshop.app.product.repository;
 
-import com.mshop.app.ProductCode;
+import com.mshop.app.ProductServiceCode;
 import com.mshop.app.category.constant.CategoryField;
 import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
 import com.mshop.app.common.core.searching.filter.FilterCondition;
@@ -39,7 +39,7 @@ public class ProductRepositoryImpl implements ProductRepository {
             return productMapper.toDto(productJPARepository.saveAndFlush(productMapper.toEntity(product)));
         } catch (DataIntegrityViolationException exception) {
             log.warn("Product already exists");
-            throw new ProductAlreadyExistException(ProductCode.PRODUCT_ALREADY_EXIST);
+            throw new ProductAlreadyExistException(ProductServiceCode.PRODUCT_ALREADY_EXIST);
         }
     }
 

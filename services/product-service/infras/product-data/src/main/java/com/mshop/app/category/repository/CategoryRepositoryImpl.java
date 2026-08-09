@@ -1,6 +1,6 @@
 package com.mshop.app.category.repository;
 
-import com.mshop.app.ProductCode;
+import com.mshop.app.ProductServiceCode;
 import com.mshop.app.category.exception.CategoryAlreadyExistException;
 import com.mshop.app.category.jpa.entity.CategoryEntity;
 import com.mshop.app.category.jpa.repo.CategoryJPARepository;
@@ -47,7 +47,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
         } catch (DataIntegrityViolationException exception) {
             log.warn("Category [name={}, code={}, path={}] already exist",
                     category.getName(), category.getCode(), category.getPath(), exception);
-            throw new CategoryAlreadyExistException(ProductCode.CATEGORY_ALREADY_EXIST);
+            throw new CategoryAlreadyExistException(ProductServiceCode.CATEGORY_ALREADY_EXIST);
         }
     }
 
@@ -81,7 +81,7 @@ public class CategoryRepositoryImpl implements CategoryRepository {
             jpaRepository.updatePathBatch(oldPath, newPath);
         } catch (DataIntegrityViolationException exception) {
             log.error("Path conflict! Moving category[path={}] to an existing path '{}'", oldPath, newPath, exception);
-            throw new CategoryAlreadyExistException(ProductCode.CATEGORY_ALREADY_EXIST);
+            throw new CategoryAlreadyExistException(ProductServiceCode.CATEGORY_ALREADY_EXIST);
         }
     }
 

@@ -1,6 +1,6 @@
 package com.mshop.app.product.service.impl;
 
-import com.mshop.app.ProductCode;
+import com.mshop.app.ProductServiceCode;
 import com.mshop.app.category.exception.CategoryNotLeafException;
 import com.mshop.app.category.repository.CategoryRepository;
 import com.mshop.app.common.core.searching.model.Query;
@@ -135,7 +135,7 @@ public class ProductServiceImpl implements ProductService {
             missingIds.removeAll(leafNodeIds);
 
             throw new CategoryNotLeafException(
-                    ProductCode.CATEGORY_IS_NOT_LEAF,
+                    ProductServiceCode.CATEGORY_IS_NOT_LEAF,
                     "Categories with id=" + missingIds + " are not leaf nodes"
             );
         }
@@ -164,6 +164,6 @@ public class ProductServiceImpl implements ProductService {
 
     private ProductNotFoundException productNotFoundException(String productId) {
         log.warn("Product [id={}] not found]", productId);
-        return new ProductNotFoundException(ProductCode.PRODUCT_NOT_FOUND);
+        return new ProductNotFoundException(ProductServiceCode.PRODUCT_NOT_FOUND);
     }
 }
