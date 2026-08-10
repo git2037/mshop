@@ -1,12 +1,12 @@
 package com.mshop.app.product.repository;
 
-import com.mshop.app.ProductServiceCode;
-import com.mshop.app.category.constant.CategoryField;
+import com.mshop.app.product.exception.ProductServiceCode;
+import com.mshop.app.product.constant.CategoryField;
 import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
 import com.mshop.app.common.core.searching.filter.FilterCondition;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.PaginationParser;
-import com.mshop.app.product.exception.ProductAlreadyExistException;
+import com.mshop.app.product.exception.product.ProductAlreadyExistException;
 import com.mshop.app.product.jpa.entity.ProductEntity;
 import com.mshop.app.product.jpa.repo.ProductJPARepository;
 import com.mshop.app.product.jpa.spec.ProductSpecification;

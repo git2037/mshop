@@ -1,8 +1,8 @@
 package com.mshop.app.product.mapper;
 
 import com.mshop.app.product.model.Product;
-import com.mshop.app.product.request.CreateProductRequest;
-import com.mshop.app.product.request.UpdateProductRequest;
+import com.mshop.app.product.request.product.CreateProductRequest;
+import com.mshop.app.product.request.product.UpdateProductRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 

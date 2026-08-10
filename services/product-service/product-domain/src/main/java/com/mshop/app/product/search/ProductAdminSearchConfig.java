@@ -1,6 +1,6 @@
 package com.mshop.app.product.search;
 
-import com.mshop.app.category.constant.CategoryField;
+import com.mshop.app.product.constant.CategoryField;
 import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.filter.FilterField;
 import com.mshop.app.common.core.searching.filter.Operators;

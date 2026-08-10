@@ -1,10 +1,10 @@
 package com.mshop.app.product.service.impl;
 
-import com.mshop.app.ProductServiceCode;
-import com.mshop.app.category.exception.CategoryNotLeafException;
-import com.mshop.app.category.repository.CategoryRepository;
+import com.mshop.app.product.exception.ProductServiceCode;
+import com.mshop.app.product.exception.category.CategoryNotLeafException;
+import com.mshop.app.product.repository.CategoryRepository;
 import com.mshop.app.common.core.searching.model.Query;
-import com.mshop.app.product.exception.ProductNotFoundException;
+import com.mshop.app.product.exception.product.ProductNotFoundException;
 import com.mshop.app.product.mapper.ProductDomainMapper;
 import com.mshop.app.product.model.Product;
 import com.mshop.app.product.repository.ProductCategoryRepository;

@@ -1,6 +1,8 @@
 package com.mshop.app.product.exception;
 
 import com.mshop.app.common.core.response.ApiResponse;
+import com.mshop.app.product.exception.product.ProductAlreadyExistException;
+import com.mshop.app.product.exception.product.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
