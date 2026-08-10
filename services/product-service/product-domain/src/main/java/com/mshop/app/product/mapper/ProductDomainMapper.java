@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface ProductServiceMapper {
+public interface ProductDomainMapper {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void updateProductFromDto(Product updateRequest, @MappingTarget Product product);
 }

@@ -3,6 +3,7 @@ package com.mshop.app.attribute.rest;
 import com.mshop.app.attribute.mapper.AttributeRequestMapper;
 import com.mshop.app.attribute.model.Attribute;
 import com.mshop.app.attribute.request.CreateAttributeRequest;
+import com.mshop.app.attribute.request.UpdateAttributeRequest;
 import com.mshop.app.attribute.search.AttributeSearchConfig;
 import com.mshop.app.attribute.service.AttributeService;
 import com.mshop.app.common.core.response.ApiResponse;
@@ -12,9 +13,12 @@ import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,7 +50,7 @@ public class AttributeAdminController {
     @ResponseStatus(HttpStatus.CREATED)
     public ApiResponse<Attribute> create(@RequestBody @Valid CreateAttributeRequest request) {
         Attribute attribute = attributeRequestMapper.toAttribute(request);
-        return ApiResponse.buildSuccessResponse("Create attribute successfully",
+        return ApiResponse.buildSuccessResponse("Created attribute successfully",
                 attributeService.create(attribute));
     }
 
@@ -64,5 +68,28 @@ public class AttributeAdminController {
     public ApiResponse<Attribute> getAttributeById(@PathVariable("id") String attributeId) {
         return ApiResponse.buildSuccessResponse("Attribute successfully fetched",
                 attributeService.getAttributeById(attributeId));
+    }
+
+    @PutMapping("/{id}")
+    public ApiResponse<Attribute> update(@PathVariable("id") String attributeId,
+                                         @RequestBody @Valid UpdateAttributeRequest request) {
+        Attribute attribute = attributeRequestMapper.toAttribute(request);
+        attribute.setId(attributeId);
+        return ApiResponse.buildSuccessResponse("Updated attribute successfully",
+                attributeService.update(attribute));
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<Void> disable(@PathVariable("id") String attributeId) {
+        attributeService.disable(attributeId);
+        return ApiResponse.buildSuccessResponse("Disabled attribute successfully", null);
+    }
+
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ApiResponse<Void> enable(@PathVariable("id") String attributeId) {
+        attributeService.enable(attributeId);
+        return ApiResponse.buildSuccessResponse("Enabled attribute successfully", null);
     }
 }

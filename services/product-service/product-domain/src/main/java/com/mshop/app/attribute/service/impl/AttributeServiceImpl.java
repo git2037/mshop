@@ -2,6 +2,7 @@ package com.mshop.app.attribute.service.impl;
 
 import com.mshop.app.ProductServiceCode;
 import com.mshop.app.attribute.exception.AttributeNotFoundException;
+import com.mshop.app.attribute.mapper.AttributeDomainMapper;
 import com.mshop.app.attribute.model.Attribute;
 import com.mshop.app.attribute.repository.AttributeRepository;
 import com.mshop.app.attribute.service.AttributeService;
@@ -10,13 +11,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class AttributeServiceImpl implements AttributeService {
+
     private final AttributeRepository attributeRepository;
+    private final AttributeDomainMapper attributeDomainMapper;
 
     @Override
     public Attribute create(Attribute attribute) {
@@ -31,6 +35,42 @@ public class AttributeServiceImpl implements AttributeService {
 
     @Override
     public Attribute getAttributeById(String attributeId) {
+        return findById(attributeId);
+    }
+
+    @Override
+    public Attribute update(Attribute attribute) {
+        Attribute attributeDb = findById(attribute.getId());
+
+        attributeDomainMapper.partialUpdate(attribute, attributeDb);
+        return attributeRepository.save(attributeDb);
+    }
+
+    @Override
+    public void disable(String attributeId) {
+        Attribute attributeDb = findById(attributeId);
+
+        if (attributeDb.getDeleted() != null) {
+            log.warn("Attribute[id={}] has been disabled", attributeId);
+            return;
+        }
+        attributeDb.setDeleted(Instant.now());
+        attributeRepository.save(attributeDb);
+    }
+
+    @Override
+    public void enable(String attributeId) {
+        Attribute attributeDb = findById(attributeId);
+
+        if (attributeDb.getDeleted() == null) {
+            log.warn("Attribute[id={}] has been enabled", attributeId);
+            return;
+        }
+        attributeDb.setDeleted(null);
+        attributeRepository.save(attributeDb);
+    }
+
+    private Attribute findById(String attributeId) {
         return attributeRepository.findById(attributeId).orElseThrow(
                 () -> {
                     log.warn("Attribute[id={}] not found", attributeId);

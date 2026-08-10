@@ -11,4 +11,10 @@ public interface AttributeService {
     List<Attribute> getAttributes(Query query);
 
     Attribute getAttributeById(String attributeId);
+
+    Attribute update(Attribute attribute);
+
+    void disable(String attributeId);
+
+    void enable(String attributeId);
 }

@@ -5,7 +5,7 @@ import com.mshop.app.category.exception.CategoryNotLeafException;
 import com.mshop.app.category.repository.CategoryRepository;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.product.exception.ProductNotFoundException;
-import com.mshop.app.product.mapper.ProductServiceMapper;
+import com.mshop.app.product.mapper.ProductDomainMapper;
 import com.mshop.app.product.model.Product;
 import com.mshop.app.product.repository.ProductCategoryRepository;
 import com.mshop.app.product.repository.ProductRepository;
@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
     private final ProductCategoryRepository productCategoryRepository;
-    private final ProductServiceMapper productServiceMapper;
+    private final ProductDomainMapper productDomainMapper;
 
     @Override
     @Transactional
@@ -65,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
     public Product update(Product product) {
         String productId = product.getId();
         Product productDB = findById(productId);
-        productServiceMapper.updateProductFromDto(product, productDB);
+        productDomainMapper.updateProductFromDto(product, productDB);
         log.info("Update product[id={}, name={}, description={}]", productId, product.getName(),
                 StringUtils.abbreviate(product.getDescription(), 15));
         return productRepository.save(productDB);
