@@ -18,12 +18,9 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder
 public class AttributeValueEntity extends BaseEntity {
-    @Column(name = "attribute_id")
-    private String attributeId;
+    @Column(name = "attribute_code")
+    private String attributeCode;
 
     @Column(name = "value")
     private String value;
-
-    @Column(name = "product_id")
-    private String productId;
 }

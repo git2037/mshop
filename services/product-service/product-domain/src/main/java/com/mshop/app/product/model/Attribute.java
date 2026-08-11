@@ -12,14 +12,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class Attribute extends BaseDto {
     private String name;
     private String code;
-    private String valueType;
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("name", name)
                 .append("code", code)
-                .append("valueType", valueType)
                 .toString();
     }
 }

@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateAttributeRequest {
+public class CreateAttributeValueRequest {
 
-    @NotBlank(message = "ATTRIBUTE_NAME_NOT_BLANK")
-    private String name;
+    @NotBlank(message = "ATTRIBUTE_VALUE_NOT_BLANK")
+    private String value;
 }

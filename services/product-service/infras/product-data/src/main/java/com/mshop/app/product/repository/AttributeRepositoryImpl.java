@@ -1,14 +1,14 @@
 package com.mshop.app.product.repository;
 
+import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
+import com.mshop.app.common.core.searching.model.Query;
+import com.mshop.app.common.core.searching.parser.PaginationParser;
 import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.exception.attribute.AttributeAlreadyExistException;
 import com.mshop.app.product.jpa.entity.AttributeEntity;
 import com.mshop.app.product.jpa.repo.AttributeJPARepository;
 import com.mshop.app.product.mapper.AttributeMapper;
 import com.mshop.app.product.model.Attribute;
-import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
-import com.mshop.app.common.core.searching.model.Query;
-import com.mshop.app.common.core.searching.parser.PaginationParser;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,5 +62,10 @@ public class AttributeRepositoryImpl implements AttributeRepository {
     public Optional<Attribute> findById(String attributeId) {
         return attributeJPARepository.findById(attributeId)
                 .map(attributeMapper::toDto);
+    }
+
+    @Override
+    public Optional<Attribute> findByCode(String attributeCode) {
+        return attributeJPARepository.findByCode(attributeCode).map(attributeMapper::toDto);
     }
 }

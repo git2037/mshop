@@ -35,11 +35,15 @@ public enum ProductServiceCode implements ErrorCode {
     // attribute code
     ATTRIBUTE_NAME_NOT_BLANK("ATTRIBUTE_001", "Attribute name can not blank"),
     ATTRIBUTE_CODE_NOT_BLANK("ATTRIBUTE_002", "Attribute code can not blank"),
-    ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_003", "Attribute value can not blank"),
-    ATTRIBUTE_VALUE_INVALID("ATTRIBUTE_003", "Invalid attribute value. Allowed values are: {values}"),
 
     ATTRIBUTE_ALREADY_EXIST("ATTRIBUTE_400", "Attribute already exist"),
+    ATTRIBUTE_ALREADY_DISABLED("ATTRIBUTE_401", "Attribute already disabled"),
     ATTRIBUTE_NOT_FOUND("ATTRIBUTE_404", "Attribute not found"),
+
+    // attribute value code
+    ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_003", "Attribute value can not blank"),
+
+    ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
 
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),

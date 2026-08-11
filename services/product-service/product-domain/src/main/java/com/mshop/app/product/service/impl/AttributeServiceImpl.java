@@ -43,6 +43,7 @@ public class AttributeServiceImpl implements AttributeService {
         Attribute attributeDb = findById(attribute.getId());
 
         attributeDomainMapper.partialUpdate(attribute, attributeDb);
+        log.info("Update attribute:{}",attribute);
         return attributeRepository.save(attributeDb);
     }
 
@@ -55,6 +56,7 @@ public class AttributeServiceImpl implements AttributeService {
             return;
         }
         attributeDb.setDeleted(Instant.now());
+        log.info("Disable attribute[id={}]",attributeId);
         attributeRepository.save(attributeDb);
     }
 
@@ -67,6 +69,7 @@ public class AttributeServiceImpl implements AttributeService {
             return;
         }
         attributeDb.setDeleted(null);
+        log.info("Enable attribute[id={}]",attributeId);
         attributeRepository.save(attributeDb);
     }
 

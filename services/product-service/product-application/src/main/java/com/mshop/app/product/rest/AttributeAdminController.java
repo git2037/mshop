@@ -1,14 +1,18 @@
 package com.mshop.app.product.rest;
 
-import com.mshop.app.product.mapper.AttributeRequestMapper;
-import com.mshop.app.product.model.Attribute;
-import com.mshop.app.product.request.attribute.CreateAttributeRequest;
-import com.mshop.app.product.request.attribute.UpdateAttributeRequest;
-import com.mshop.app.product.search.AttributeSearchConfig;
-import com.mshop.app.product.service.AttributeService;
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
+import com.mshop.app.product.mapper.AttributeRequestMapper;
+import com.mshop.app.product.mapper.AttributeValueRequestMapper;
+import com.mshop.app.product.model.Attribute;
+import com.mshop.app.product.model.AttributeValue;
+import com.mshop.app.product.request.attribute.CreateAttributeRequest;
+import com.mshop.app.product.request.attribute.CreateAttributeValueRequest;
+import com.mshop.app.product.request.attribute.UpdateAttributeRequest;
+import com.mshop.app.product.search.AttributeSearchConfig;
+import com.mshop.app.product.service.AttributeService;
+import com.mshop.app.product.service.AttributeValueService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -35,16 +39,19 @@ public class AttributeAdminController {
 
     private final AttributeService attributeService;
     private final AttributeRequestMapper attributeRequestMapper;
-    private final AttributeSearchConfig  attributeSearchConfig;
+    private final AttributeSearchConfig attributeSearchConfig;
+    private final AttributeValueService attributeValueService;
+    private final AttributeValueRequestMapper attributeValueRequestMapper;
 
     public AttributeAdminController(AttributeService attributeService,
                                     AttributeRequestMapper attributeRequestMapper,
-                                    @Qualifier("attributeSearchConfig") AttributeSearchConfig attributeSearchConfig) {
+                                    @Qualifier("attributeSearchConfig") AttributeSearchConfig attributeSearchConfig, AttributeValueService attributeValueService, AttributeValueRequestMapper attributeValueRequestMapper) {
         this.attributeService = attributeService;
         this.attributeRequestMapper = attributeRequestMapper;
         this.attributeSearchConfig = attributeSearchConfig;
+        this.attributeValueService = attributeValueService;
+        this.attributeValueRequestMapper = attributeValueRequestMapper;
     }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -91,5 +98,15 @@ public class AttributeAdminController {
     public ApiResponse<Void> enable(@PathVariable("id") String attributeId) {
         attributeService.enable(attributeId);
         return ApiResponse.buildSuccessResponse("Enabled attribute successfully", null);
+    }
+
+    @PostMapping("/{code}/values")
+    @ResponseStatus(HttpStatus.CREATED)
+    public ApiResponse<AttributeValue> createAttributeValue(@PathVariable("code") String attributeCode,
+                                                            @RequestBody @Valid CreateAttributeValueRequest request) {
+        AttributeValue attributeValue = attributeValueRequestMapper
+                .toAttributeValue(request, attributeCode.toUpperCase());
+        return ApiResponse.buildSuccessResponse("Created attribute value successfully",
+                attributeValueService.create(attributeValue));
     }
 }

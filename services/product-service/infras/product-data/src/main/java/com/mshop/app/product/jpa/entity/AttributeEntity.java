@@ -23,7 +23,4 @@ public class AttributeEntity extends BaseEntity {
 
     @Column(name = "code", nullable = false)
     private String code;
-
-    @Column(name = "value_type", nullable = false)
-    private String valueType;
 }
