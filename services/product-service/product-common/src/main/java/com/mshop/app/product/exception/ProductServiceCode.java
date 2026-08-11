@@ -43,6 +43,7 @@ public enum ProductServiceCode implements ErrorCode {
     // attribute value code
     ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_003", "Attribute value can not blank"),
 
+    ATTRIBUTE_VALUE_NOT_FOUND("ATTRIBUTE_VALUE_404", "Attribute value not found"),
     ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
 
     // invalid code

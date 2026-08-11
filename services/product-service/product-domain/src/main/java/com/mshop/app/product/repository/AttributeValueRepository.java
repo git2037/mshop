@@ -1,7 +1,15 @@
 package com.mshop.app.product.repository;
 
+import com.mshop.app.common.core.searching.model.Pagination;
 import com.mshop.app.product.model.AttributeValue;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface AttributeValueRepository {
     AttributeValue save(AttributeValue attributeValue);
+
+    List<AttributeValue> findAllByAttributeCode(String attributeCode, Pagination pagination);
+
+    Optional<AttributeValue> findById(String attributeValueId);
 }

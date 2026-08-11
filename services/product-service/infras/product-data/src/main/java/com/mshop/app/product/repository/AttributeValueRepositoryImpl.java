@@ -1,5 +1,6 @@
 package com.mshop.app.product.repository;
 
+import com.mshop.app.common.core.searching.model.Pagination;
 import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.exception.attribute.AttributeValueAlreadyExistException;
 import com.mshop.app.product.jpa.entity.AttributeValueEntity;
@@ -9,8 +10,13 @@ import com.mshop.app.product.model.AttributeValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -33,5 +39,19 @@ public class AttributeValueRepositoryImpl implements AttributeValueRepository {
             log.error("Attribute value {} already exists!", attributeValue, e);
             throw new AttributeValueAlreadyExistException(ProductServiceCode.ATTRIBUTE_VALUE_ALREADY_EXIST);
         }
+    }
+
+    @Override
+    public List<AttributeValue> findAllByAttributeCode(String attributeCode, Pagination pagination) {
+        Pageable pageable = PageRequest.of(pagination.getPage() - 1, pagination.getPageSize());
+        return attributeValueJPARepository.findAllByAttributeCode(attributeCode, pageable).stream()
+                .map(attributeValueMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public Optional<AttributeValue> findById(String attributeValueId) {
+        return attributeValueJPARepository.findById(attributeValueId)
+                .map(attributeValueMapper::toDto);
     }
 }

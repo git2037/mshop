@@ -14,4 +14,6 @@ public interface AttributeRepository {
     Optional<Attribute> findById(String attributeId);
 
     Optional<Attribute> findByCode(String attributeCode);
+
+    boolean existsByCode(String attributeCode);
 }

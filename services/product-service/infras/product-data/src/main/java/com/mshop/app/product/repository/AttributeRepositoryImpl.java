@@ -68,4 +68,9 @@ public class AttributeRepositoryImpl implements AttributeRepository {
     public Optional<Attribute> findByCode(String attributeCode) {
         return attributeJPARepository.findByCode(attributeCode).map(attributeMapper::toDto);
     }
+
+    @Override
+    public boolean existsByCode(String attributeCode) {
+        return attributeJPARepository.existsByCode(attributeCode);
+    }
 }

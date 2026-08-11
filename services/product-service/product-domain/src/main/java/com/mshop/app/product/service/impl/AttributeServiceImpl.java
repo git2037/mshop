@@ -1,10 +1,15 @@
 package com.mshop.app.product.service.impl;
 
+import com.mshop.app.common.core.searching.model.Pagination;
 import com.mshop.app.product.exception.ProductServiceCode;
+import com.mshop.app.product.exception.attribute.AttributeAlreadyDisableException;
 import com.mshop.app.product.exception.attribute.AttributeNotFoundException;
+import com.mshop.app.product.exception.attribute.AttributeValueNotFoundException;
 import com.mshop.app.product.mapper.AttributeDomainMapper;
 import com.mshop.app.product.model.Attribute;
+import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.repository.AttributeRepository;
+import com.mshop.app.product.repository.AttributeValueRepository;
 import com.mshop.app.product.service.AttributeService;
 import com.mshop.app.common.core.searching.model.Query;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ public class AttributeServiceImpl implements AttributeService {
 
     private final AttributeRepository attributeRepository;
     private final AttributeDomainMapper attributeDomainMapper;
+    private  final AttributeValueRepository attributeValueRepository;
 
     @Override
     public Attribute create(Attribute attribute) {
@@ -71,6 +77,48 @@ public class AttributeServiceImpl implements AttributeService {
         attributeDb.setDeleted(null);
         log.info("Enable attribute[id={}]",attributeId);
         attributeRepository.save(attributeDb);
+    }
+
+    @Override
+    public AttributeValue createAttributeValue(AttributeValue attributeValue) {
+        String attributeCode = attributeValue.getAttributeCode();
+        validateAttribute(attributeCode);
+
+        log.info("Create attribute value:{}", attributeValue);
+        return attributeValueRepository.save(attributeValue);
+    }
+
+    @Override
+    public List<AttributeValue> getAttributeValuesByAttributeCode(String attributeCode, Pagination pagination) {
+        if (!attributeRepository.existsByCode(attributeCode)) {
+            throw getAttributeNotFoundExceptionByCode(attributeCode);
+        }
+
+        return attributeValueRepository.findAllByAttributeCode(attributeCode, pagination);
+    }
+
+    @Override
+    public AttributeValue getAttributeValueByAttributeValueId(String attributeValueId) {
+        return attributeValueRepository.findById(attributeValueId)
+                .orElseThrow(() -> {
+                    log.warn("Attribute value[id={}] not found", attributeValueId);
+                    return new AttributeValueNotFoundException(ProductServiceCode.ATTRIBUTE_VALUE_NOT_FOUND);
+                });
+    }
+
+    private AttributeNotFoundException getAttributeNotFoundExceptionByCode(String attributeCode) {
+        log.warn("Attribute [code={}] not found", attributeCode);
+        return new AttributeNotFoundException(ProductServiceCode.ATTRIBUTE_NOT_FOUND);
+    }
+
+    private void validateAttribute(String attributeCode) {
+        Attribute attribute = attributeRepository.findByCode(attributeCode)
+                .orElseThrow(() -> getAttributeNotFoundExceptionByCode(attributeCode));
+
+        if (attribute.getDeleted() != null) {
+            log.warn("Attribute [code={}] has been disabled", attributeCode);
+            throw new AttributeAlreadyDisableException(ProductServiceCode.ATTRIBUTE_ALREADY_DISABLED);
+        }
     }
 
     private Attribute findById(String attributeId) {

@@ -9,4 +9,6 @@ import java.util.Optional;
 public interface AttributeJPARepository extends JpaRepository<AttributeEntity, String>, JpaSpecificationExecutor<AttributeEntity> {
 
     Optional<AttributeEntity> findByCode(String attributeCode);
+
+    boolean existsByCode(String code);
 }
