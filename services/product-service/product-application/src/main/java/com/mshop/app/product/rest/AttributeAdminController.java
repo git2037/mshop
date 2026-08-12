@@ -1,15 +1,11 @@
 package com.mshop.app.product.rest;
 
 import com.mshop.app.common.core.response.ApiResponse;
-import com.mshop.app.common.core.searching.model.Pagination;
 import com.mshop.app.common.core.searching.model.Query;
-import com.mshop.app.common.core.searching.parser.PaginationParser;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
 import com.mshop.app.product.mapper.AttributeRequestMapper;
 import com.mshop.app.product.model.Attribute;
-import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.request.attribute.CreateAttributeRequest;
-import com.mshop.app.product.request.attribute.CreateAttributeValueRequest;
 import com.mshop.app.product.request.attribute.UpdateAttributeRequest;
 import com.mshop.app.product.search.AttributeSearchConfig;
 import com.mshop.app.product.service.AttributeService;
@@ -83,40 +79,14 @@ public class AttributeAdminController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<Void> disable(@PathVariable("id") String attributeId) {
         attributeService.disable(attributeId);
         return ApiResponse.buildSuccessResponse("Disabled attribute successfully", null);
     }
 
     @PatchMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<Void> enable(@PathVariable("id") String attributeId) {
         attributeService.enable(attributeId);
         return ApiResponse.buildSuccessResponse("Enabled attribute successfully", null);
-    }
-
-    @PostMapping("/{code}/values")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<AttributeValue> createAttributeValue(@PathVariable("code") String attributeCode,
-                                                            @RequestBody @Valid CreateAttributeValueRequest request) {
-        AttributeValue attributeValue = attributeRequestMapper
-                .toAttributeValue(request, attributeCode.toUpperCase());
-        return ApiResponse.buildSuccessResponse("Created attribute value successfully",
-                attributeService.createAttributeValue(attributeValue));
-    }
-
-    @GetMapping("/{code}/values")
-    public ApiResponse<List<AttributeValue>> getAttributeValuesByAttributeCode(@PathVariable("code") String attributeCode,
-                                                                               @RequestParam Map<String, String> queryParams) {
-        Pagination pagination = PaginationParser.parse(queryParams);
-        return ApiResponse.buildSuccessResponse("Fetched attribute values successfully",
-                attributeService.getAttributeValuesByAttributeCode(attributeCode, pagination));
-    }
-
-    @GetMapping("/values/{id}")
-    public ApiResponse<AttributeValue> getAttributeValue(@PathVariable("id") String attributeValueId) {
-        return ApiResponse.buildSuccessResponse("Fetched attribute value successfully",
-                attributeService.getAttributeValueByAttributeValueId(attributeValueId));
     }
 }

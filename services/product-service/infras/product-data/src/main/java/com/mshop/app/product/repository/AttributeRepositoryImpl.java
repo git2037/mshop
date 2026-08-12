@@ -27,7 +27,7 @@ import java.util.Optional;
 public class AttributeRepositoryImpl implements AttributeRepository {
 
     private final AttributeMapper attributeMapper;
-    private final AttributeJPARepository  attributeJPARepository;
+    private final AttributeJPARepository attributeJPARepository;
 
     @Override
     @Transactional

@@ -16,6 +16,7 @@ public class AttributeValue extends BaseDto {
     @Override
     public String toString() {
         return new ToStringBuilder(this)
+                .append("id", super.getId())
                 .append("attributeCode", attributeCode)
                 .append("value", value)
                 .toString();

@@ -12,4 +12,8 @@ public interface AttributeValueRepository {
     List<AttributeValue> findAllByAttributeCode(String attributeCode, Pagination pagination);
 
     Optional<AttributeValue> findById(String attributeValueId);
+
+    void disableAllByAttributeCode(String attributeCode);
+
+    void enableAllByAttributeCode(String attributeCode);
 }

@@ -14,4 +14,12 @@ public class BaseDto {
     Instant createdAt;
     Instant updatedAt;
     Instant deleted;
+
+    public void disable() {
+        this.deleted = Instant.now();
+    }
+
+    public void enable() {
+        this.deleted = null;
+    }
 }

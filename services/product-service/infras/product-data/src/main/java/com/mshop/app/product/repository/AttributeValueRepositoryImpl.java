@@ -54,4 +54,18 @@ public class AttributeValueRepositoryImpl implements AttributeValueRepository {
         return attributeValueJPARepository.findById(attributeValueId)
                 .map(attributeValueMapper::toDto);
     }
+
+    @Override
+    @Transactional
+    public void disableAllByAttributeCode(String attributeCode) {
+        int affectedRows = attributeValueJPARepository.disableAllByAttributeCode(attributeCode);
+        log.info("Disabled {} row(s).", affectedRows);
+    }
+
+    @Override
+    @Transactional
+    public void enableAllByAttributeCode(String attributeCode) {
+        int affectedRows = attributeValueJPARepository.enableAllByAttributeCode(attributeCode);
+        log.info("Enabled {} row(s).", affectedRows);
+    }
 }
