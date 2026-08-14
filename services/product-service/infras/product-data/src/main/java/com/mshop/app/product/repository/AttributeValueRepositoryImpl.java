@@ -17,6 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 @Slf4j
@@ -67,5 +69,11 @@ public class AttributeValueRepositoryImpl implements AttributeValueRepository {
     public void enableAllByAttributeCode(String attributeCode) {
         int affectedRows = attributeValueJPARepository.enableAllByAttributeCode(attributeCode);
         log.info("Enabled {} row(s).", affectedRows);
+    }
+
+    @Override
+    public Set<AttributeValue> findAllByIdIn(Set<String> attributeValueIds) {
+        return attributeValueJPARepository.findAllByIdIn(attributeValueIds).stream()
+                .map(attributeValueMapper::toDto).collect(Collectors.toSet());
     }
 }

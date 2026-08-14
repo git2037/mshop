@@ -2,6 +2,7 @@ package com.mshop.app.product.exception;
 
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.product.exception.product.ProductAlreadyExistException;
+import com.mshop.app.product.exception.product.ProductAttributeValueAlreadyExistException;
 import com.mshop.app.product.exception.product.ProductNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class ProductExceptionHandler {
     @ExceptionHandler(value = {ProductNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ApiResponse<Void> handleProductNotFoundException(ProductNotFoundException e) {
+        return ApiResponse.buildFailResponse(e);
+    }
+
+    @ExceptionHandler(value = {ProductAttributeValueAlreadyExistException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleProductAttributeValueAlreadyExistException(ProductAttributeValueAlreadyExistException e) {
         return ApiResponse.buildFailResponse(e);
     }
 }

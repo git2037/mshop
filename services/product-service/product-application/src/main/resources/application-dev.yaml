@@ -8,7 +8,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
-
+        jdbc:
+          batch_size: 10
+        order_inserts: true
 server:
   port: 9100
 logging:

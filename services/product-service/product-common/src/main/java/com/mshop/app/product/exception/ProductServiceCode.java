@@ -31,6 +31,7 @@ public enum ProductServiceCode implements ErrorCode {
 
     PRODUCT_NOT_FOUND("PRODUCT_404", "Product not found"),
     PRODUCT_ALREADY_EXIST("PRODUCT_400", "Product already exist"),
+    PRODUCT_ATTRIBUTE_VALUE_ALREADY_EXIST("PRODUCT_401", "Duplicate attribute value detected in this product."),
 
     // attribute code
     ATTRIBUTE_NAME_NOT_BLANK("ATTRIBUTE_001", "Attribute name can not blank"),
@@ -38,13 +39,17 @@ public enum ProductServiceCode implements ErrorCode {
 
     ATTRIBUTE_ALREADY_EXIST("ATTRIBUTE_400", "Attribute already exist"),
     ATTRIBUTE_ALREADY_DISABLED("ATTRIBUTE_401", "Attribute already disabled"),
+    ATTRIBUTE_CODE_ALREADY_EXIST_IN_PRODUCT("ATTRIBUTE_402", "Attribute code already exist in this product."),
     ATTRIBUTE_NOT_FOUND("ATTRIBUTE_404", "Attribute not found"),
 
     // attribute value code
-    ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_003", "Attribute value can not blank"),
+    ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_VALUE_001", "Attribute value can not blank"),
+    ATTRIBUTE_VALUE_IDS_NOT_EMPTY("ATTRIBUTE_VALUE_002", "Attribute value id list must not be empty"),
+    ATTRIBUTE_VALUE_ID_NOT_BLANK("ATTRIBUTE_VALUE_403", "Attribute value id must not be blank"),
 
     ATTRIBUTE_VALUE_NOT_FOUND("ATTRIBUTE_VALUE_404", "Attribute value not found"),
     ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
+    DUPLICATED_ATTRIBUTE_CODE("ATTRIBUTE_VALUE_401", "Duplicated attribute code"),
 
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),

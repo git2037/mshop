@@ -29,6 +29,7 @@ public class CategoryServiceImpl implements CategoryService {
     private static final String FORWARD_SLASH = "/";
 
     @Override
+    @Transactional
     public Category create(Category category) {
         String parentId = category.getParentId();
         String code = category.getCode();
@@ -86,6 +87,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public Category update(String categoryId, Category payload) {
         Category category = findById(categoryId);
         String name = category.getName();
@@ -133,6 +135,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void disable(String categoryId) {
         Category category = findById(categoryId);
         if (category.getDeleted() != null) {
@@ -145,6 +148,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void enable(String categoryId) {
         Category category = findById(categoryId);
         if (category.getDeleted() == null) {

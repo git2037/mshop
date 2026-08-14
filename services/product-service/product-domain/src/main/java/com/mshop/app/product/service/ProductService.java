@@ -26,4 +26,8 @@ public interface ProductService {
     void disable(String productId);
 
     void enable(String productId);
+
+    void attachAttributeValue(String productId, Set<String> attributeValueIds);
+
+    void detachAttributeValue(String productId, Set<String> attributeValueIds);
 }

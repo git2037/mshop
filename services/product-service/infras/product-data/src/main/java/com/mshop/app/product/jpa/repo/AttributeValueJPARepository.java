@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Set;
+
 public interface AttributeValueJPARepository extends JpaRepository<AttributeValueEntity, String>, JpaSpecificationExecutor<AttributeValueEntity> {
     Page<AttributeValueEntity> findAllByAttributeCode(String attributeCode, Pageable pageable);
 
@@ -27,4 +29,6 @@ public interface AttributeValueJPARepository extends JpaRepository<AttributeValu
             where attributeCode = :code
             """)
     int enableAllByAttributeCode(@Param("code") String code);
+
+    Set<AttributeValueEntity> findAllByIdIn(Set<String> attributeValueIds);
 }

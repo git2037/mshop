@@ -14,6 +14,7 @@ import com.mshop.app.product.service.AttributeValueService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     private final AttributeValueDomainMapper attributeValueDomainMapper;
 
     @Override
+    @Transactional
     public AttributeValue create(AttributeValue attributeValue) {
         String attributeCode = attributeValue.getAttributeCode();
         validateAttribute(attributeCode);
@@ -50,6 +52,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     }
 
     @Override
+    @Transactional
     public AttributeValue update(AttributeValue attributeValue) {
         AttributeValue attributeValueDb = findById(attributeValue.getId());
         attributeValueDomainMapper.partialUpdate(attributeValue, attributeValueDb);
@@ -59,6 +62,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     }
 
     @Override
+    @Transactional
     public void disable(String attributeValueId) {
         AttributeValue attributeValue = findById(attributeValueId);
 
@@ -73,6 +77,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     }
 
     @Override
+    @Transactional
     public void enable(String attributeValueId) {
         AttributeValue attributeValue = findById(attributeValueId);
 

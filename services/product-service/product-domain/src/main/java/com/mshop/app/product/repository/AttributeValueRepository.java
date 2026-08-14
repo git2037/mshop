@@ -5,6 +5,7 @@ import com.mshop.app.product.model.AttributeValue;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 public interface AttributeValueRepository {
     AttributeValue save(AttributeValue attributeValue);
@@ -16,4 +17,6 @@ public interface AttributeValueRepository {
     void disableAllByAttributeCode(String attributeCode);
 
     void enableAllByAttributeCode(String attributeCode);
+
+    Set<AttributeValue> findAllByIdIn(Set<String> attributeValueIds);
 }

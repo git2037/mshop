@@ -25,6 +25,7 @@ public class AttributeServiceImpl implements AttributeService {
     private final AttributeValueRepository attributeValueRepository;
 
     @Override
+    @Transactional
     public Attribute create(Attribute attribute) {
         log.info("Create attribute:{}", attribute);
         return attributeRepository.save(attribute);
@@ -41,6 +42,7 @@ public class AttributeServiceImpl implements AttributeService {
     }
 
     @Override
+    @Transactional
     public Attribute update(Attribute attribute) {
         Attribute attributeDb = findById(attribute.getId());
 
