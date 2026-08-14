@@ -61,3 +61,12 @@ databaseChangeLog:
         - sqlFile:
             dbms: mysql
             path: classpath:/changelog/source/07-modify-attribute_value-table.sql
+
+  - changeSet:
+      id: 08-create-product-attribute-value-table
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/changelog/source/08-create-product-attribute-value-table.sql
