@@ -28,12 +28,23 @@ public class GlobalExceptionHandler {
         return ApiResponse.buildFailResponse(ex);
     }
 
-    @ExceptionHandler(value = {ValidationException.class})
+    @ExceptionHandler(value = {ValidationException.class,
+            BadRequestException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ApiResponse<Void> handleValidationException(ValidationException ex) {
-        ErrorCode code = ex.getCode();
-        String message = ex.getMessage() == null ? code.getMessage() : ex.getMessage();
-        return ApiResponse.buildFailResponse(code.getCode(), message);
+    public ApiResponse<Void> handleBadRequestException(AppException ex) {
+        return ApiResponse.buildFailResponse(ex);
+    }
+
+    @ExceptionHandler(value = {ConflictException.class})
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ApiResponse<Void> handleConflictException(ConflictException ex) {
+        return ApiResponse.buildFailResponse(ex);
+    }
+
+    @ExceptionHandler(value = {ResourceNotFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ApiResponse<Void> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return ApiResponse.buildFailResponse(ex);
     }
 
     @ExceptionHandler(value = {Exception.class})
