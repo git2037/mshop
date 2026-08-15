@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Set;
 
 public interface AttributeValueJPARepository extends JpaRepository<AttributeValueEntity, String>, JpaSpecificationExecutor<AttributeValueEntity> {
@@ -31,4 +32,23 @@ public interface AttributeValueJPARepository extends JpaRepository<AttributeValu
     int enableAllByAttributeCode(@Param("code") String code);
 
     Set<AttributeValueEntity> findAllByIdIn(Set<String> attributeValueIds);
+
+    @Query("""
+            select av
+            from AttributeValueEntity av, ProductAttributeValueEntity pav
+            where pav.productId = :productId
+              and av.id = pav.attributeValueId
+            """)
+    List<AttributeValueEntity> findAllInProductAttributeValueByProductId(
+            @Param("productId") String productId);
+
+    @Query("""
+            select av
+            from AttributeValueEntity av, ProductAttributeValueEntity pav
+            where pav.productId = :productId
+              and av.id = pav.attributeValueId
+              and av.deleted is null
+            """)
+    List<AttributeValueEntity> findAllEnableAttributeValueInProductAttributeValueByProductId(
+            @Param("productId") String productId);
 }

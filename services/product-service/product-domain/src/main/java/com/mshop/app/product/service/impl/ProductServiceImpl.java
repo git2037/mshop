@@ -168,6 +168,16 @@ public class ProductServiceImpl implements ProductService {
         productAttributeValueRepository.removeAllByProductIdAndAttributeValueIdsIn(productId, attributeValueIds);
     }
 
+    @Override
+    public List<AttributeValue> getAllAttributeValuesById(String productId) {
+        return attributeValueRepository.findAllInProductAttributeValueByProductId(productId);
+    }
+
+    @Override
+    public List<AttributeValue> getAllEnabledAttributeValuesById(String productId) {
+        return attributeValueRepository.findAllEnableAttributeValueInProductAttributeValueByProductId(productId);
+    }
+
     private void validateAttributeValueIdNotFoundInProduct(String productId, Set<String> attributeValueIds) {
         Set<String> attributeValueIdsInProduct = productAttributeValueRepository
                 .findAllAttributeValueIdsByProductIdAndAttributeValueIdIn(productId, attributeValueIds);

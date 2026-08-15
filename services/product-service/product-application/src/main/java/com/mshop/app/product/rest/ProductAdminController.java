@@ -5,6 +5,7 @@ import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
 import com.mshop.app.product.mapper.ProductRequestMapper;
+import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
 import com.mshop.app.product.request.product.AddProductCategoryRequest;
 import com.mshop.app.product.request.product.AttachAttributeValueRequest;
@@ -126,5 +127,11 @@ public class ProductAdminController {
                                                 @RequestBody @Valid DetachProductAttributeValueRequest request) {
         service.detachAttributeValue(productId, request.getAttributeValueIds());
         return ApiResponse.buildSuccessResponse("Successfully removed attribute values from product", null);
+    }
+
+    @GetMapping("/{id}/attributes")
+    public ApiResponse<List<AttributeValue>> getAllAttributes(@PathVariable("id") String productId) {
+        return ApiResponse.buildSuccessResponse("Successfully fetched attribute values from product",
+                service.getAllAttributeValuesById(productId));
     }
 }

@@ -76,4 +76,21 @@ public class AttributeValueRepositoryImpl implements AttributeValueRepository {
         return attributeValueJPARepository.findAllByIdIn(attributeValueIds).stream()
                 .map(attributeValueMapper::toDto).collect(Collectors.toSet());
     }
+
+    @Override
+    public List<AttributeValue> findAllInProductAttributeValueByProductId(String productId) {
+        return attributeValueJPARepository.findAllInProductAttributeValueByProductId(productId)
+                .stream()
+                .map(attributeValueMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<AttributeValue> findAllEnableAttributeValueInProductAttributeValueByProductId(String productId) {
+        return attributeValueJPARepository
+                .findAllEnableAttributeValueInProductAttributeValueByProductId(productId)
+                .stream()
+                .map(attributeValueMapper::toDto)
+                .toList();
+    }
 }

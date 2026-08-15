@@ -19,4 +19,8 @@ public interface AttributeValueRepository {
     void enableAllByAttributeCode(String attributeCode);
 
     Set<AttributeValue> findAllByIdIn(Set<String> attributeValueIds);
+
+    List<AttributeValue> findAllInProductAttributeValueByProductId(String productId);
+
+    List<AttributeValue> findAllEnableAttributeValueInProductAttributeValueByProductId(String productId);
 }
