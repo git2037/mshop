@@ -51,5 +51,11 @@
             <groupId>com.mshop.app</groupId>
             <artifactId>common-core</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>com.mshop.app</groupId>
+            <artifactId>product-file-storage</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 </project>

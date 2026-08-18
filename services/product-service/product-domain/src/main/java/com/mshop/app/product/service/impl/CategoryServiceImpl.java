@@ -1,5 +1,6 @@
 package com.mshop.app.product.service.impl;
 
+import com.mshop.app.product.constant.ProductServiceConstant;
 import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.exception.category.CategoryNotMoveException;
 import com.mshop.app.product.exception.category.CategoryNotFoundException;
@@ -25,8 +26,7 @@ import java.util.function.Supplier;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-
-    private static final String FORWARD_SLASH = "/";
+    private static final String FORWARD_SLASH = ProductServiceConstant.FORWARD_SLASH;
 
     @Override
     @Transactional

@@ -1,10 +1,9 @@
-package com.mshop.app.product.rest;
+package com.mshop.app.product.rest.product;
 
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
-import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
 import com.mshop.app.product.service.ProductService;
 import lombok.extern.slf4j.Slf4j;
@@ -47,11 +46,5 @@ public class ProductController {
     public ApiResponse<Product> getById(@PathVariable("id") String productId) {
         return ApiResponse.buildSuccessResponse("Product fetched successfully",
                 service.getEnableProductById(productId));
-    }
-
-    @GetMapping("/{id}/attributes")
-    public ApiResponse<List<AttributeValue>> getAllAttributes(@PathVariable("id") String productId) {
-        return ApiResponse.buildSuccessResponse("Successfully fetched attribute values from product",
-                service.getAllEnabledAttributeValuesById(productId));
     }
 }

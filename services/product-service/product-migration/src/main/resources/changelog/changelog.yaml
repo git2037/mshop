@@ -70,3 +70,21 @@ databaseChangeLog:
         - sqlFile:
             dbms: mysql
             path: classpath:/changelog/source/08-create-product-attribute-value-table.sql
+
+  - changeSet:
+      id: 09-add-thumbnail-column-product
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/changelog/source/09-add-thumbnail-column-product.sql
+
+  - changeSet:
+      id: 10-modify-product-image-table
+      author: minh
+      onValidationFail: MARK_RAN
+      changes:
+        - sqlFile:
+            dbms: mysql
+            path: classpath:/changelog/source/10-modify-product-image-table.sql

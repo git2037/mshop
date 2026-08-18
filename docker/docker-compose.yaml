@@ -60,12 +60,30 @@ services:
     profiles:
       - "kafka"
       - "all"
+
+  minio:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server --console-address ":9001" /data
+    profiles:
+      - "all"
+      - "minio"
       
 volumes:
   mshop-data:
     name: mshop-data
   kafka-data:
     name: kafka-data
+  minio-data:
+    name: minio-data
 
 networks:
   keycloak-network:

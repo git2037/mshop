@@ -64,6 +64,7 @@
         <module>product-common</module>
         <module>product-migration</module>
         <module>infras/product-data</module>
+        <module>infras/product-file-storage</module>
     </modules>
 
     <build>

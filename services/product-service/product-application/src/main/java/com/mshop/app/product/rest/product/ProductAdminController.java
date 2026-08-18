@@ -1,17 +1,12 @@
-package com.mshop.app.product.rest;
+package com.mshop.app.product.rest.product;
 
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.common.core.searching.SearchConfig;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
 import com.mshop.app.product.mapper.ProductRequestMapper;
-import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
-import com.mshop.app.product.request.product.AddProductCategoryRequest;
-import com.mshop.app.product.request.product.AttachAttributeValueRequest;
 import com.mshop.app.product.request.product.CreateProductRequest;
-import com.mshop.app.product.request.product.DetachProductAttributeValueRequest;
-import com.mshop.app.product.request.product.RemoveProductCategoryRequest;
 import com.mshop.app.product.request.product.UpdateProductRequest;
 import com.mshop.app.product.service.ProductService;
 import jakarta.validation.Valid;
@@ -84,22 +79,6 @@ public class ProductAdminController {
                 service.update(product));
     }
 
-    @PostMapping("/{id}/categories")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> addProductToCategories(@PathVariable("id") String productId,
-                                                    @RequestBody @Valid AddProductCategoryRequest request) {
-        service.addToCategories(productId, request.getCategoryIds());
-        return ApiResponse.buildSuccessResponse("Product added to categories successfully", null);
-    }
-
-    @PutMapping("/{id}/categories")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ApiResponse<Void> removeProductToCategories(@PathVariable("id") String productId,
-                                                    @RequestBody @Valid RemoveProductCategoryRequest request) {
-        service.removeFromCategories(productId, request.getCategoryIds());
-        return ApiResponse.buildSuccessResponse("Product removed to categories successfully", null);
-    }
-
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ApiResponse<Void> disable(@PathVariable("id") String productId) {
@@ -112,26 +91,5 @@ public class ProductAdminController {
     public ApiResponse<Void> enable(@PathVariable("id") String productId) {
         service.enable(productId);
         return ApiResponse.buildSuccessResponse("Product enabled successfully", null);
-    }
-
-    @PostMapping("/{id}/attributes")
-    @ResponseStatus(HttpStatus.CREATED)
-    public ApiResponse<Void> attachAttributeValue(@PathVariable("id") String productId,
-                                                    @RequestBody @Valid AttachAttributeValueRequest request) {
-        service.attachAttributeValue(productId, request.getAttributeValueIds());
-        return ApiResponse.buildSuccessResponse("Successfully added attribute values to product", null);
-    }
-
-    @DeleteMapping("/{id}/attributes")
-    public ApiResponse<Void> detachAttributeValue(@PathVariable("id") String productId,
-                                                @RequestBody @Valid DetachProductAttributeValueRequest request) {
-        service.detachAttributeValue(productId, request.getAttributeValueIds());
-        return ApiResponse.buildSuccessResponse("Successfully removed attribute values from product", null);
-    }
-
-    @GetMapping("/{id}/attributes")
-    public ApiResponse<List<AttributeValue>> getAllAttributes(@PathVariable("id") String productId) {
-        return ApiResponse.buildSuccessResponse("Successfully fetched attribute values from product",
-                service.getAllAttributeValuesById(productId));
     }
 }

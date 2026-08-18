@@ -1,11 +1,9 @@
 package com.mshop.app.product.service;
 
 import com.mshop.app.common.core.searching.model.Query;
-import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
 
 import java.util.List;
-import java.util.Set;
 
 public interface ProductService {
     Product create(Product product);
@@ -20,19 +18,7 @@ public interface ProductService {
 
     Product update(Product product);
 
-    void addToCategories(String productId, Set<String> categoryIds);
-
-    void removeFromCategories(String productId, Set<String> categoryIds);
-
     void disable(String productId);
 
     void enable(String productId);
-
-    void attachAttributeValue(String productId, Set<String> attributeValueIds);
-
-    void detachAttributeValue(String productId, Set<String> attributeValueIds);
-
-    List<AttributeValue> getAllAttributeValuesById(String productId);
-
-    List<AttributeValue> getAllEnabledAttributeValuesById(String productId);
 }
