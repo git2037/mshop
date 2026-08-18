@@ -2,7 +2,9 @@ package com.mshop.app.product.exception;
 
 import com.mshop.app.common.core.exception.BadRequestException;
 import com.mshop.app.common.core.exception.ErrorCode;
+import lombok.Getter;
 
+@Getter
 public class FileValidationException extends BadRequestException {
     private final String fileName;
 

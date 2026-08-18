@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Map;
+
 @RestControllerAdvice
 public class FileExceptionHandler {
 
@@ -19,7 +21,10 @@ public class FileExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ApiResponse<Void> handleFileValidationException(FileValidationException exception) {
         ErrorCode code = exception.getCode();
-        return ApiResponse.buildFailResponse(code.getCode(), buildMessage(code));
+        String message = buildMessage(code);
+
+        Map<String, Object> map = Map.of("file_name", exception.getFileName());
+        return ApiResponse.buildFailResponse(code.getCode(), message, map);
     }
 
     private String buildMessage(ErrorCode errorCode) {
