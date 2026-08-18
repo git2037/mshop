@@ -11,4 +11,6 @@ public interface ProductImageService {
     void remove(String productId, Set<String> fileNames);
 
     List<String> getUrlImages(String productId);
+
+    void setThumbnail(String productId, String fileName);
 }

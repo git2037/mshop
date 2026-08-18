@@ -50,7 +50,7 @@ public class ProductImageRepositoryImpl implements ProductImageRepository {
     }
 
     @Override
-    public List<String> findAllFileNamesByProductId(String productId) {
+    public Set<String> findAllFileNamesByProductId(String productId) {
         return productImageJPARepository.findAllFileNamesByProductId(productId);
     }
 }

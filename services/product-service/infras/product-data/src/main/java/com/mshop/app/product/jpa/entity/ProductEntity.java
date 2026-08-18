@@ -26,4 +26,7 @@ public class ProductEntity extends BaseEntity {
     @Lob
     @Column(name = "description")
     private String description;
+
+    @Column(name = "thumbnail")
+    private String thumbnail;
 }

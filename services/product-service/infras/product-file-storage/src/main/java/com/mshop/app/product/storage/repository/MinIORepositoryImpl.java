@@ -79,7 +79,7 @@ public class MinIORepositoryImpl implements FileStorageRepository {
     @Override
     public String buildUrlImages(String fileName) {
         return minioProperties.getUrl() + ProductServiceConstant.FORWARD_SLASH
-                + bucketName +  ProductServiceConstant.FORWARD_SLASH
+                + bucketName + ProductServiceConstant.FORWARD_SLASH
                 + fileName;
     }
 }

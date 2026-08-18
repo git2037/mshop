@@ -2,14 +2,17 @@ package com.mshop.app.product.service.impl;
 
 import com.mshop.app.common.core.exception.ResourceNotFoundException;
 import com.mshop.app.product.exception.ProductServiceCode;
+import com.mshop.app.product.model.Product;
 import com.mshop.app.product.reader.ProductReader;
 import com.mshop.app.product.repository.FileStorageRepository;
 import com.mshop.app.product.repository.ProductImageRepository;
+import com.mshop.app.product.repository.ProductRepository;
 import com.mshop.app.product.service.ProductImageService;
 import com.mshop.app.product.validator.ImageValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.text.MessageFormat;
@@ -27,6 +30,7 @@ public class ProductImageServiceImpl implements ProductImageService {
     private final FileStorageRepository fileStorageRepository;
     private final ProductImageRepository productImageRepository;
     private final ImageValidator imageValidator;
+    private final ProductRepository productRepository;
 
     @Override
     public void create(String productId, List<MultipartFile> files) {
@@ -78,9 +82,31 @@ public class ProductImageServiceImpl implements ProductImageService {
     public List<String> getUrlImages(String productId) {
         productReader.existById(productId);
 
-        return productImageRepository.
-                findAllFileNamesByProductId(productId).stream()
+        return productImageRepository
+                .findAllFileNamesByProductId(productId).stream()
                 .map(fileStorageRepository::buildUrlImages)
                 .toList();
+    }
+
+    @Override
+    @Transactional
+    public void setThumbnail(String productId, String fileName) {
+        Product product = productReader.findById(productId);
+        Set<String> fileNames =
+                productImageRepository.findAllFileNamesByProductId(productId);
+
+        if (product.getThumbnail().equals(fileName)) {
+            log.warn("Set duplicately thumbnail");
+            return;
+        }
+
+        if (!fileNames.contains(fileName)) {
+            log.warn("Image[name={}] not exist in product[id={}]", fileName, productId);
+            throw new ResourceNotFoundException(ProductServiceCode.PRODUCT_IMAGE_NOT_FOUND);
+        }
+
+        product.setThumbnail(fileName);
+        log.info("Set thumbnail[name={}] to product[id={}]", fileName, productId);
+        productRepository.save(product);
     }
 }

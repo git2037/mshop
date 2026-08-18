@@ -11,4 +11,5 @@ import lombok.experimental.SuperBuilder;
 public class Product extends BaseDto {
     private String name;
     private String description;
+    private String thumbnail;
 }

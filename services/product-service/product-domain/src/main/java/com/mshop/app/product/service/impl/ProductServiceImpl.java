@@ -8,10 +8,10 @@ import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.exception.attribute.AttributeValueNotFoundException;
 import com.mshop.app.product.exception.category.CategoryNotLeafException;
-import com.mshop.app.product.exception.product.ProductNotFoundException;
 import com.mshop.app.product.mapper.ProductDomainMapper;
 import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
+import com.mshop.app.product.reader.ProductReader;
 import com.mshop.app.product.repository.AttributeValueRepository;
 import com.mshop.app.product.repository.CategoryRepository;
 import com.mshop.app.product.repository.ProductAttributeValueRepository;
@@ -30,9 +30,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +44,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductDomainMapper productDomainMapper;
     private final ProductAttributeValueRepository productAttributeValueRepository;
     private final AttributeValueRepository attributeValueRepository;
+    private final ProductReader productReader;
 
     @Override
     @Transactional
@@ -67,19 +66,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product getById(String id) {
-        return findById(id);
+        return productReader.findById(id);
     }
 
     @Override
     public Product getEnableProductById(String id) {
-        return findEnableProductById(id);
+        return productReader.findEnableProductById(id);
     }
 
     @Override
     @Transactional
     public Product update(Product product) {
         String productId = product.getId();
-        Product productDB = findById(productId);
+        Product productDB = productReader.findById(productId);
         productDomainMapper.updateProductFromDto(product, productDB);
         log.info("Update product[id={}, name={}, description={}]", productId, product.getName(),
                 StringUtils.abbreviate(product.getDescription(), 15));
@@ -89,7 +88,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void addToCategories(String productId, Set<String> categoryIds) {
-        existById(productId);
+        productReader.existById(productId);
         validateCategories(categoryIds);
 
         Set<String> existingCategoryIds = productCategoryRepository
@@ -107,7 +106,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void removeFromCategories(String productId, Set<String> categoryIds) {
-        existById(productId);
+        productReader.existById(productId);
         validateCategories(categoryIds);
 
         log.info("Remove product from categoryIds={}", categoryIds);
@@ -117,7 +116,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void disable(String productId) {
-        Product product = findById(productId);
+        Product product = productReader.findById(productId);
 
         if (product.getDeleted() != null) {
             log.info("Product[id={}] already disabled", product.getId());
@@ -131,7 +130,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void enable(String productId) {
-        Product product = findById(productId);
+        Product product = productReader.findById(productId);
 
         if (product.getDeleted() == null) {
             log.info("Product[id={}] already enabled", product.getId());
@@ -145,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void attachAttributeValue(String productId, Set<String> attributeValueIds) {
-        existById(productId);
+        productReader.existById(productId);
         validateAttributeValueIds(productId, attributeValueIds);
 
         log.info("Add attribute values with id={} to product[id={}]", attributeValueIds, productId);
@@ -155,7 +154,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public void detachAttributeValue(String productId, Set<String> attributeValueIds) {
-        existById(productId);
+        productReader.existById(productId);
 
         Set<AttributeValue> attributeValues = attributeValueRepository.findAllByIdIn(attributeValueIds);
         validateAttributeValueIdsNotFound(attributeValues, attributeValueIds);
@@ -264,31 +263,5 @@ public class ProductServiceImpl implements ProductService {
                     "Categories with id=" + missingIds + " are not leaf nodes"
             );
         }
-    }
-
-    private void existById(String id) {
-        if (!productRepository.existById(id)) {
-            throw productNotFoundException(id);
-        }
-    }
-
-    private Product findById(String id) {
-        return findProduct(id,
-                () -> productRepository.findById(id));
-    }
-
-    private Product findEnableProductById(String id) {
-        return findProduct(id,
-                () -> productRepository.findByIdAndDeletedIsNull(id));
-    }
-
-    private Product findProduct(String productId, Supplier<Optional<Product>> supplier) {
-        return supplier.get().orElseThrow(
-                () -> productNotFoundException(productId));
-    }
-
-    private ProductNotFoundException productNotFoundException(String productId) {
-        log.warn("Product [id={}] not found]", productId);
-        return new ProductNotFoundException(ProductServiceCode.PRODUCT_NOT_FOUND);
     }
 }
