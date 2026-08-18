@@ -37,11 +37,11 @@ class SortMapperTest {
 
     static Stream<Arguments> invalidSortParams() {
         return Stream.of(
-                Arguments.of(List.of("created-at   ,asc"), "The sort parameter 'created-at   ' is invalid."),
-                Arguments.of(List.of("abc,asc"), "The field 'abc' is not allowed for sorting."),
-                Arguments.of(List.of("Created-at,asc"), "The sort parameter 'Created-at' is invalid."),
-                Arguments.of(List.of(","), "Invalid sort parameter format: ','."),
-                Arguments.of(List.of("created-at,asc,desc"), "Invalid sort parameter format: 'created-at,asc,desc'.")
+                Arguments.of(List.of("created-at   :asc"), "The sort parameter 'created-at   ' is invalid."),
+                Arguments.of(List.of("abc:asc"), "The field 'abc' is not allowed for sorting."),
+                Arguments.of(List.of("Created-at:asc"), "The sort parameter 'Created-at' is invalid."),
+                Arguments.of(List.of(":"), "Invalid sort parameter format: ':'."),
+                Arguments.of(List.of("created-at:asc:desc"), "Invalid sort parameter format: 'created-at:asc:desc'.")
         );
     }
 
@@ -54,14 +54,14 @@ class SortMapperTest {
 
     static Stream<List<String>> invalidDirections() {
         return Stream.of(
-                List.of("created-at,abc"),
-                List.of("created-at,  ge")
+                List.of("created-at:abc"),
+                List.of("created-at:  ge")
         );
     }
 
     @Test
     void should_return_map_when_valid_param() {
-        List<String> params = List.of("created-at", "created-by,desc");
+        List<String> params = List.of("created-at", "created-by:desc");
         Map<String, SortDirection> map = SortMapper.map(params, allowedSortField);
 
         assertThat(map).containsExactly(

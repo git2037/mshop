@@ -1,6 +1,7 @@
 package com.mshop.app.product.service;
 
 import com.mshop.app.common.core.searching.model.Query;
+import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
 
 import java.util.List;
@@ -26,4 +27,12 @@ public interface ProductService {
     void disable(String productId);
 
     void enable(String productId);
+
+    void attachAttributeValue(String productId, Set<String> attributeValueIds);
+
+    void detachAttributeValue(String productId, Set<String> attributeValueIds);
+
+    List<AttributeValue> getAllAttributeValuesById(String productId);
+
+    List<AttributeValue> getAllEnabledAttributeValuesById(String productId);
 }

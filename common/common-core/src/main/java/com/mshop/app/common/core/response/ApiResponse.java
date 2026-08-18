@@ -47,6 +47,7 @@ public class ApiResponse<T> {
 
     public static ApiResponse<Void> buildFailResponse(AppException exception) {
         ErrorCode errorCode = exception.getCode();
-        return ApiResponse.buildFailResponse(errorCode.getCode(), errorCode.getMessage());
+        String message = exception.getMessage() == null ? errorCode.getMessage() : exception.getMessage();
+        return ApiResponse.buildFailResponse(errorCode.getCode(), message);
     }
 }

@@ -1,7 +1,7 @@
 package com.mshop.app.product.jpa.spec;
 
-import com.mshop.app.category.constant.CategoryField;
-import com.mshop.app.category.jpa.entity.CategoryEntity;
+import com.mshop.app.product.constant.CategoryField;
+import com.mshop.app.product.jpa.entity.CategoryEntity;
 import com.mshop.app.common.core.utils.StringUtils;
 import com.mshop.app.product.constant.ProductCategoryField;
 import com.mshop.app.product.constant.ProductField;
