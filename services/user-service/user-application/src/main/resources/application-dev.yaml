@@ -30,7 +30,7 @@ spring:
             jwk-set-uri: ${keycloak.jwks_uri}
 
 server:
-  port: 9000
+  port: 9010
 logging:
   level:
     com.mshop.app: debug
