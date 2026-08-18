@@ -14,6 +14,7 @@ import com.mshop.app.product.model.Product;
 import com.mshop.app.product.reader.ProductReader;
 import com.mshop.app.product.repository.AttributeValueRepository;
 import com.mshop.app.product.repository.CategoryRepository;
+import com.mshop.app.product.repository.FileStorageRepository;
 import com.mshop.app.product.repository.ProductAttributeValueRepository;
 import com.mshop.app.product.repository.ProductCategoryRepository;
 import com.mshop.app.product.repository.ProductRepository;
@@ -45,6 +46,7 @@ public class ProductServiceImpl implements ProductService {
     private final ProductAttributeValueRepository productAttributeValueRepository;
     private final AttributeValueRepository attributeValueRepository;
     private final ProductReader productReader;
+    private final FileStorageRepository fileStorageRepository;
 
     @Override
     @Transactional
@@ -56,22 +58,30 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getAll(Query query) {
-        return productRepository.findAll(query);
+        List<Product> products = productRepository.findAll(query);
+        products.forEach(this::setThumbnailUrl);
+        return products;
     }
 
     @Override
     public List<Product> getAllEnableProduct(Query query) {
-        return productRepository.findAllEnableProduct(query);
+        List<Product> products = productRepository.findAllEnableProduct(query);
+        products.forEach(this::setThumbnailUrl);
+        return products;
     }
 
     @Override
     public Product getById(String id) {
-        return productReader.findById(id);
+        Product product = productReader.findById(id);
+        setThumbnailUrl(product);
+        return product;
     }
 
     @Override
     public Product getEnableProductById(String id) {
-        return productReader.findEnableProductById(id);
+        Product product = productReader.findEnableProductById(id);
+        setThumbnailUrl(product);
+        return product;
     }
 
     @Override
@@ -189,6 +199,17 @@ public class ProductServiceImpl implements ProductService {
             throw new ResourceNotFoundException(ProductServiceCode.ATTRIBUTE_VALUE_NOT_FOUND,
                     MessageFormat.format("Attribute value with ids={0} not found in this product", missingAttributeValues));
         }
+    }
+
+    private void setThumbnailUrl(Product product) {
+        String thumbnail = product.getThumbnail();
+
+        if (thumbnail != null) {
+            product.setThumbnail(
+                    fileStorageRepository.buildUrlImages(thumbnail)
+            );
+        }
+
     }
 
     private void validateAttributeValueIds(String productId, Set<String> attributeValueIds) {
