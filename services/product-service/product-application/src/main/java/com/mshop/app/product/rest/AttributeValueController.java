@@ -29,7 +29,7 @@ import java.util.Map;
 @RequestMapping("api/v1/admin/attributes")
 @RestController
 @RequiredArgsConstructor
-public class AttributeValueAdminController {
+public class AttributeValueController {
 
     private final AttributeValueService attributeValueService;
     private final AttributeValueRequestMapper attributeValueRequestMapper;

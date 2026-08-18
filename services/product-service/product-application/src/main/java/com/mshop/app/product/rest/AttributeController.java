@@ -31,15 +31,15 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("api/v1/admin/attributes")
 @RestController
-public class AttributeAdminController {
+public class AttributeController {
 
     private final AttributeService attributeService;
     private final AttributeRequestMapper attributeRequestMapper;
     private final AttributeSearchConfig attributeSearchConfig;
 
-    public AttributeAdminController(AttributeService attributeService,
-                                    AttributeRequestMapper attributeRequestMapper,
-                                    @Qualifier("attributeSearchConfig") AttributeSearchConfig attributeSearchConfig) {
+    public AttributeController(AttributeService attributeService,
+                               AttributeRequestMapper attributeRequestMapper,
+                               @Qualifier("attributeSearchConfig") AttributeSearchConfig attributeSearchConfig) {
         this.attributeService = attributeService;
         this.attributeRequestMapper = attributeRequestMapper;
         this.attributeSearchConfig = attributeSearchConfig;
