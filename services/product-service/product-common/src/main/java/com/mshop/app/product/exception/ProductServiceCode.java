@@ -51,6 +51,21 @@ public enum ProductServiceCode implements ErrorCode {
     ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
     DUPLICATED_ATTRIBUTE_CODE("ATTRIBUTE_VALUE_401", "Duplicated attribute code"),
 
+    // product image
+    PRODUCT_IMAGES_NOT_NULL("PRODUCT_IMAGE_001", "Product images can not be null"),
+    PRODUCT_IMAGE_FILE_NAMES_NOT_NULL("PRODUCT_IMAGE_002", "File names can not be null"),
+    PRODUCT_IMAGE_FILE_NAME_NOT_BLANK("PRODUCT_IMAGE_003", "File name can not be blank"),
+
+    PRODUCT_IMAGE_NOT_FOUND("IMAGE_404", "Image not found in product"),
+    PRODUCT_IMAGE_ALREADY_EXIST("IMAGE_400", "Image already exist in this product."),
+
+    // file
+    FILE_EMPTY("FILE_001", "File is empty"),
+    FILE_SIZE_EXCEEDED("FILE_002", "Image size exceeds the maximum allowed limit of {size}MB"),
+    FILE_NOT_SUPPORTED("FILE_003", "Invalid file format. Only image files {types} are allowed."),
+    FILE_CORRUPTED_OR_INVALID_IMAGE("FILE_004", "The uploaded file is corrupt or not a valid image format."),
+    FILE_NULL("FILE_005", "File is null"),
+
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),
     ;

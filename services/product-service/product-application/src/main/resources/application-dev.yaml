@@ -20,3 +20,10 @@ logging:
     com.mshop.app: debug
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-}] %-5level %logger{36} - %msg%n"
+
+minio:
+  url: http://localhost:9000
+  access-key: admin
+  secret-key: password
+  bucket-name: mshop
+  product-image-prefix: product-images

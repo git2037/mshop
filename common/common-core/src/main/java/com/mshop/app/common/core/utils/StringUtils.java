@@ -38,4 +38,8 @@ public class StringUtils {
                 .replaceAll("([A-Z])([A-Z][a-z])", "$1_$2")
                 .toLowerCase();
     }
+
+    public static String createPlaceholderParam(String param) {
+        return "{" + param + "}";
+    }
 }
