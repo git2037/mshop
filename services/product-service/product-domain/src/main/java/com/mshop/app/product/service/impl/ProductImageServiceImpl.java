@@ -73,4 +73,14 @@ public class ProductImageServiceImpl implements ProductImageService {
         log.info("Removing images from storage");
         fileStorageRepository.removeAll(fileNames.stream().toList());
     }
+
+    @Override
+    public List<String> getUrlImages(String productId) {
+        productReader.existById(productId);
+
+        return productImageRepository.
+                findAllFileNamesByProductId(productId).stream()
+                .map(fileStorageRepository::buildUrlImages)
+                .toList();
+    }
 }

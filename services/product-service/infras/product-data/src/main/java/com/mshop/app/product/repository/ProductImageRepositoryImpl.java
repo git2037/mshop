@@ -48,4 +48,9 @@ public class ProductImageRepositoryImpl implements ProductImageRepository {
         int affectedRows = productImageJPARepository.removeAllByProductIdAndFileNameIn(productId, fileNames);
         log.info("Removed {} rows in product image", affectedRows);
     }
+
+    @Override
+    public List<String> findAllFileNamesByProductId(String productId) {
+        return productImageJPARepository.findAllFileNamesByProductId(productId);
+    }
 }

@@ -8,12 +8,15 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequestMapping("api/v1/products/{id}/images")
 @RestController
@@ -34,5 +37,11 @@ public class ProductImageController {
                                        @PathVariable("id") String productId){
         productImageService.remove(productId, request.getFileNames());
         return ApiResponse.buildSuccessResponse("Detached images to product successfully", null);
+    }
+
+    @GetMapping
+    public ApiResponse<List<String>> getImages(@PathVariable("id") String productId){
+        return ApiResponse.buildSuccessResponse("Fetched images from product successfully",
+                productImageService.getUrlImages(productId));
     }
 }

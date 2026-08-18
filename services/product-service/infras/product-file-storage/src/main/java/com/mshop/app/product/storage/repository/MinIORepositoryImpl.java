@@ -2,6 +2,7 @@ package com.mshop.app.product.storage.repository;
 
 import com.mshop.app.product.constant.ProductServiceConstant;
 import com.mshop.app.product.repository.FileStorageRepository;
+import com.mshop.app.product.storage.config.MinIOProperties;
 import com.mshop.app.product.storage.minio.MinIOExecutor;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
@@ -25,6 +26,7 @@ import java.util.UUID;
 public class MinIORepositoryImpl implements FileStorageRepository {
 
     private final MinioClient minioClient;
+    private final MinIOProperties minioProperties;
 
     @Value("${minio.bucket-name}")
     private String bucketName;
@@ -72,5 +74,12 @@ public class MinIORepositoryImpl implements FileStorageRepository {
             DeleteError error = MinIOExecutor.execute(result::get);
             log.error("Error in deleting object name={}, message={}", error.objectName(), error.message());
         }
+    }
+
+    @Override
+    public String buildUrlImages(String fileName) {
+        return minioProperties.getUrl() + ProductServiceConstant.FORWARD_SLASH
+                + bucketName +  ProductServiceConstant.FORWARD_SLASH
+                + fileName;
     }
 }

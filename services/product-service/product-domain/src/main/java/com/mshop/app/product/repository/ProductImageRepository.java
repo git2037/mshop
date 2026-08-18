@@ -9,4 +9,6 @@ public interface ProductImageRepository {
     Set<String> findAllFileNamesByProductIdAndFileNameIn(String productId, Set<String> fileNames);
 
     void removeAllByProductIdAndFileNameIn(String productId, Set<String> fileNames);
+
+    List<String> findAllFileNamesByProductId(String productId);
 }

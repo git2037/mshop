@@ -9,4 +9,6 @@ public interface ProductImageService {
     void create(String productId, List<MultipartFile> files);
 
     void remove(String productId, Set<String> fileNames);
+
+    List<String> getUrlImages(String productId);
 }
