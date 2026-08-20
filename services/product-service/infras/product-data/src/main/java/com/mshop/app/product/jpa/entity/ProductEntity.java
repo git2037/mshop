@@ -29,4 +29,7 @@ public class ProductEntity extends BaseEntity {
 
     @Column(name = "thumbnail")
     private String thumbnail;
+
+    @Column(name = "code")
+    private String code;
 }

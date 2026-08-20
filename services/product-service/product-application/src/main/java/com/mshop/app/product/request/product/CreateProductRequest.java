@@ -13,4 +13,7 @@ public class CreateProductRequest {
     private String name;
 
     private String description;
+
+    @NotBlank(message = "PRODUCT_CODE_NOT_BLANK")
+    private String code;
 }

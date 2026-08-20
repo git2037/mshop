@@ -12,4 +12,5 @@ public class Product extends BaseDto {
     private String name;
     private String description;
     private String thumbnail;
+    private String code;
 }

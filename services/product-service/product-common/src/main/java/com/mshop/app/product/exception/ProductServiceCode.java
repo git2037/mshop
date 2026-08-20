@@ -28,6 +28,7 @@ public enum ProductServiceCode implements ErrorCode {
 
     // product code
     PRODUCT_NAME_NOT_BLANK("PRODUCT_001", "Product name can not blank"),
+    PRODUCT_CODE_NOT_BLANK("PRODUCT_002", "Product code can not blank"),
 
     PRODUCT_NOT_FOUND("PRODUCT_404", "Product not found"),
     PRODUCT_ALREADY_EXIST("PRODUCT_400", "Product already exist"),
