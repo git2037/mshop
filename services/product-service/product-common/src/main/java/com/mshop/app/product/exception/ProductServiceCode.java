@@ -46,6 +46,8 @@ public enum ProductServiceCode implements ErrorCode {
     // attribute value code
     ATTRIBUTE_VALUE_NOT_BLANK("ATTRIBUTE_VALUE_001", "Attribute value can not blank"),
     ATTRIBUTE_VALUE_IDS_NOT_EMPTY("ATTRIBUTE_VALUE_002", "Attribute value id list must not be empty"),
+    ATTRIBUTE_VALUE_CODE_NOT_BLANK("ATTRIBUTE_VALUE_003", "Attribute value code must not be blank"),
+
     ATTRIBUTE_VALUE_ID_NOT_BLANK("ATTRIBUTE_VALUE_403", "Attribute value id must not be blank"),
 
     ATTRIBUTE_VALUE_NOT_FOUND("ATTRIBUTE_VALUE_404", "Attribute value not found"),

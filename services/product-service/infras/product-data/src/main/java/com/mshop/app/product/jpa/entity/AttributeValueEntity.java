@@ -23,4 +23,7 @@ public class AttributeValueEntity extends BaseEntity {
 
     @Column(name = "value")
     private String value;
+
+    @Column(name = "value_code")
+    private String valueCode;
 }

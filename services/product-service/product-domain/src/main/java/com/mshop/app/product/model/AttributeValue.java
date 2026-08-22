@@ -12,6 +12,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 public class AttributeValue extends BaseDto {
     private String attributeCode;
     private String value;
+    private String valueCode;
 
     @Override
     public String toString() {
@@ -19,6 +20,7 @@ public class AttributeValue extends BaseDto {
                 .append("id", super.getId())
                 .append("attributeCode", attributeCode)
                 .append("value", value)
+                .append("valueCode", valueCode)
                 .toString();
     }
 }

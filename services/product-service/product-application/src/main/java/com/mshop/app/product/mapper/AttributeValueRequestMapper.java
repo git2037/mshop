@@ -11,6 +11,7 @@ import org.mapstruct.MappingConstants;
 public interface AttributeValueRequestMapper {
     @Mapping(target = "attributeCode", source = "attributeCode")
     @Mapping(target = "value", source = "request.value")
+    @Mapping(target = "valueCode", source = "request.code")
     AttributeValue toAttributeValue(CreateAttributeValueRequest request, String attributeCode);
 
     AttributeValue toAttributeValue(UpdateAttributeValueRequest request, String id);

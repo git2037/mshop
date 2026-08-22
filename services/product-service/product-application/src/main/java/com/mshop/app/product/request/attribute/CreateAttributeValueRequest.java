@@ -12,4 +12,7 @@ public class CreateAttributeValueRequest {
 
     @NotBlank(message = "ATTRIBUTE_VALUE_NOT_BLANK")
     private String value;
+
+    @NotBlank(message = "ATTRIBUTE_VALUE_CODE_NOT_BLANK")
+    private String code;
 }
