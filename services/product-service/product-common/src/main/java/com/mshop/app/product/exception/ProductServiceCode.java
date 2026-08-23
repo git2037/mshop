@@ -49,7 +49,6 @@ public enum ProductServiceCode implements ErrorCode {
     ATTRIBUTE_VALUE_CODE_NOT_BLANK("ATTRIBUTE_VALUE_003", "Attribute value code must not be blank"),
 
     ATTRIBUTE_VALUE_ID_NOT_BLANK("ATTRIBUTE_VALUE_403", "Attribute value id must not be blank"),
-
     ATTRIBUTE_VALUE_NOT_FOUND("ATTRIBUTE_VALUE_404", "Attribute value not found"),
     ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
     DUPLICATED_ATTRIBUTE_CODE("ATTRIBUTE_VALUE_401", "Duplicated attribute code"),
@@ -68,6 +67,16 @@ public enum ProductServiceCode implements ErrorCode {
     FILE_NOT_SUPPORTED("FILE_003", "Invalid file format. Only image files {types} are allowed."),
     FILE_CORRUPTED_OR_INVALID_IMAGE("FILE_004", "The uploaded file is corrupt or not a valid image format."),
     FILE_NULL("FILE_005", "File is null"),
+
+    // sku
+    SKU_STOCK_NOT_NULL("SKU_001", "SKU stock can not be null"),
+    SKU_STOCK_NOT_POSITIVE_OR_ZERO("SKU_002", "SKU stock must be positive or zero"),
+    SKU_PRICE_NOT_NULL("SKU_003", "SKU price can not be null"),
+    SKU_PRICE_NOT_POSITIVE("SKU_004", "SKU price must be positive"),
+
+    SKU_ALREADY_EXIST("SKU_400", "Sku already exists"),
+    SKU_DUPLICATED_ATTRIBUTE_CODE("SKU_401", "Duplicated attribute code"),
+    SKU_DUPLICATE_ATTRIBUTE_VALUE_IN_SKU("SKU_402", "Duplicated attribute value in this sku"),
 
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),
