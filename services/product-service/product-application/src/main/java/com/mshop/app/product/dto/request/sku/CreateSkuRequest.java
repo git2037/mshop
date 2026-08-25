@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.sku;
+package com.mshop.app.product.dto.request.sku;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;

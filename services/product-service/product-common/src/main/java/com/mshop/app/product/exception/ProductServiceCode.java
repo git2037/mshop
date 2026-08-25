@@ -77,6 +77,7 @@ public enum ProductServiceCode implements ErrorCode {
     SKU_ALREADY_EXIST("SKU_400", "Sku already exists"),
     SKU_DUPLICATED_ATTRIBUTE_CODE("SKU_401", "Duplicated attribute code"),
     SKU_DUPLICATE_ATTRIBUTE_VALUE_IN_SKU("SKU_402", "Duplicated attribute value in this sku"),
+    SKU_NOT_FOUND("SKU_404", "SKU not found"),
 
     // invalid code
     INVALID_PRODUCT_CODE("PRODUCT_999", ErrorMessage.GENERIC),

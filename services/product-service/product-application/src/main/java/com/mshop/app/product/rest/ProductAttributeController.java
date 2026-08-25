@@ -2,8 +2,8 @@ package com.mshop.app.product.rest;
 
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.product.model.AttributeValue;
-import com.mshop.app.product.request.product.AttachAttributeValueRequest;
-import com.mshop.app.product.request.product.DetachProductAttributeValueRequest;
+import com.mshop.app.product.dto.request.product.AttachAttributeValueRequest;
+import com.mshop.app.product.dto.request.product.DetachProductAttributeValueRequest;
 import com.mshop.app.product.service.ProductAttributeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

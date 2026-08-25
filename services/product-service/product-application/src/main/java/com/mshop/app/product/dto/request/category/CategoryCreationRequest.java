@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.category;
+package com.mshop.app.product.dto.request.category;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

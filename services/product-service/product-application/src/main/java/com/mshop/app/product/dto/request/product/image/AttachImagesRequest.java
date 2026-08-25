@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.product.image;
+package com.mshop.app.product.dto.request.product.image;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;

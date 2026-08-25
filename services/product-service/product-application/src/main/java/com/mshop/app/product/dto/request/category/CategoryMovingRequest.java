@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.category;
+package com.mshop.app.product.dto.request.category;
 
 import com.mshop.app.common.core.validator.NotBlankIfPresent;
 import lombok.AllArgsConstructor;

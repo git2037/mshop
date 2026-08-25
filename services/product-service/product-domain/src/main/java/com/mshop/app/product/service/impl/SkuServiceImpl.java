@@ -7,6 +7,7 @@ import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.model.Product;
 import com.mshop.app.product.model.Sku;
+import com.mshop.app.product.model.SkuAttributeValue;
 import com.mshop.app.product.reader.ProductReader;
 import com.mshop.app.product.repository.AttributeValueRepository;
 import com.mshop.app.product.repository.SkuAttributeValueRepository;
@@ -59,6 +60,30 @@ public class SkuServiceImpl implements SkuService {
         return createdSku;
     }
 
+    @Override
+    public List<SkuAttributeValue> getAllByProductId(String productId) {
+        productReader.existById(productId);
+
+        return skuRepository.findAllByProductId(productId);
+    }
+
+    @Override
+    public List<SkuAttributeValue> getAllEnableSkuByProductId(String productId) {
+        productReader.existById(productId);
+
+        return skuRepository.findAllByProductIdAndDeletedIsNull(productId);
+    }
+
+    @Override
+    public List<SkuAttributeValue> getById(String id) {
+        if (!skuRepository.existsById(id)) {
+            log.warn("Sku [id={}] not found]", id);
+            throw new ResourceNotFoundException(ProductServiceCode.SKU_NOT_FOUND);
+        }
+
+        return skuRepository.findById(id);
+    }
+
     private void validateAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds) {
         validateNotFoundAttributeValue(attributeValueList, attributeValueIds);
         validateDuplicateAttributeCode(attributeValueList);
@@ -84,7 +109,7 @@ public class SkuServiceImpl implements SkuService {
         }
     }
 
-    private void validateNotFoundAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds){
+    private void validateNotFoundAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds) {
         if (attributeValueIds.size() != attributeValueList.size()) {
             Set<String> notExistAttributeValueIds = new HashSet<>(attributeValueIds);
             Set<String> existAttributeValueIds = attributeValueList.stream()
@@ -92,7 +117,7 @@ public class SkuServiceImpl implements SkuService {
                     .collect(Collectors.toSet());
             notExistAttributeValueIds.removeAll(existAttributeValueIds);
 
-            log.warn("{} not found",  notExistAttributeValueIds);
+            log.warn("{} not found", notExistAttributeValueIds);
             throw new ResourceNotFoundException(ProductServiceCode.ATTRIBUTE_VALUE_NOT_FOUND,
                     "Attribute value with ids = %s not found".formatted(notExistAttributeValueIds));
         }
@@ -102,7 +127,7 @@ public class SkuServiceImpl implements SkuService {
         StringBuilder builder = new StringBuilder();
         builder.append(productCode);
 
-         attributeValueList.stream()
+        attributeValueList.stream()
                 .sorted(Comparator.comparing(AttributeValue::getAttributeCode))
                 .map(AttributeValue::getValueCode)
                 .forEachOrdered(code -> builder.append(DASH_SPLIT).append(code));

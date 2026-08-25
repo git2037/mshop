@@ -1,8 +1,8 @@
 package com.mshop.app.product.rest;
 
 import com.mshop.app.common.core.response.ApiResponse;
-import com.mshop.app.product.request.product.AddProductCategoryRequest;
-import com.mshop.app.product.request.product.RemoveProductCategoryRequest;
+import com.mshop.app.product.dto.request.product.AddProductCategoryRequest;
+import com.mshop.app.product.dto.request.product.RemoveProductCategoryRequest;
 import com.mshop.app.product.service.ProductCategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

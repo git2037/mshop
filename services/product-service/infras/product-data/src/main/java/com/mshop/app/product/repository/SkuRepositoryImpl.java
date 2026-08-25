@@ -6,11 +6,14 @@ import com.mshop.app.product.jpa.entity.SkuEntity;
 import com.mshop.app.product.jpa.repo.SkuJPARepository;
 import com.mshop.app.product.mapper.SkuMapper;
 import com.mshop.app.product.model.Sku;
+import com.mshop.app.product.model.SkuAttributeValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Repository
 @Slf4j
@@ -30,5 +33,31 @@ public class SkuRepositoryImpl implements SkuRepository {
             log.error("Sku already exists", exception);
             throw new ConflictException(ProductServiceCode.SKU_ALREADY_EXIST);
         }
+    }
+
+    @Override
+    public List<SkuAttributeValue> findAllByProductId(String productId) {
+        return skuJPARepository.findAllByProductId(productId).stream()
+                .map(skuMapper::toSkuAttributeValue)
+                .toList();
+    }
+
+    @Override
+    public List<SkuAttributeValue> findAllByProductIdAndDeletedIsNull(String productId) {
+        return skuJPARepository.findAllByProductIdAndDeletedIsNull(productId).stream()
+                .map(skuMapper::toSkuAttributeValue)
+                .toList();
+    }
+
+    @Override
+    public List<SkuAttributeValue> findById(String id) {
+        return skuJPARepository.findProjectionById(id).stream()
+                .map(skuMapper::toSkuAttributeValue)
+                .toList();
+    }
+
+    @Override
+    public boolean existsById(String id) {
+        return skuJPARepository.existsById(id);
     }
 }

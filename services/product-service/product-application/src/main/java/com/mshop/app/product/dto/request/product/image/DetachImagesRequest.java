@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.product;
+package com.mshop.app.product.dto.request.product.image;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,9 +11,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class RemoveProductCategoryRequest {
-    @NotEmpty(message = "CATEGORY_IDS_NOT_EMPTY")
+public class DetachImagesRequest {
+
+    @NotEmpty(message = "PRODUCT_IMAGE_FILE_NAMES_NOT_NULL")
     private Set<
-            @NotBlank(message = "CATEGORY_ID_NOT_BLANK")
-            String> categoryIds;
+            @NotBlank(message = "PRODUCT_IMAGE_FILE_NAME_NOT_BLANK")
+            String> fileNames;
 }

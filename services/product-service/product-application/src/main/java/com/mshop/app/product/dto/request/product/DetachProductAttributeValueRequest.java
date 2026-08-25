@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.product.image;
+package com.mshop.app.product.dto.request.product;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -11,10 +11,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class DetachImagesRequest {
-
-    @NotEmpty(message = "PRODUCT_IMAGE_FILE_NAMES_NOT_NULL")
+public class DetachProductAttributeValueRequest {
+    @NotEmpty(message = "ATTRIBUTE_VALUE_IDS_NOT_EMPTY")
     private Set<
-            @NotBlank(message = "PRODUCT_IMAGE_FILE_NAME_NOT_BLANK")
-            String> fileNames;
+            @NotBlank(message = "ATTRIBUTE_VALUE_ID_NOT_BLANK")
+                    String> attributeValueIds;
 }

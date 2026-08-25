@@ -1,4 +1,4 @@
-package com.mshop.app.product.request.attribute;
+package com.mshop.app.product.dto.request.attribute;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpdateAttributeValueRequest {
+public class UpdateAttributeRequest {
 
-    @NotBlank(message = "ATTRIBUTE_VALUE_NOT_BLANK")
-    private String value;
+    @NotBlank(message = "ATTRIBUTE_NAME_NOT_BLANK")
+    private String name;
 }
