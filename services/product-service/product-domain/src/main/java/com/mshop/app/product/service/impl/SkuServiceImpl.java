@@ -87,6 +87,7 @@ public class SkuServiceImpl implements SkuService {
     private void validateAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds) {
         validateNotFoundAttributeValue(attributeValueList, attributeValueIds);
         validateDuplicateAttributeCode(attributeValueList);
+        checkCanCreateSku(attributeValueList);
     }
 
     private void validateDuplicateAttributeCode(Set<AttributeValue> attributeValueList) {
@@ -107,6 +108,17 @@ public class SkuServiceImpl implements SkuService {
             throw new BadRequestException(ProductServiceCode.SKU_DUPLICATED_ATTRIBUTE_CODE,
                     "Duplicated attribute codes: " + duplicatedAttributeCodes);
         }
+    }
+
+    private void checkCanCreateSku(Set<AttributeValue> attributeValueList) {
+        attributeValueList.forEach(
+                attributeValue -> {
+                    if (attributeValue.getDeleted() != null) {
+                        log.warn("Attribute value[id={}] already deleted", attributeValue.getId());
+                        throw new BadRequestException(ProductServiceCode.ATTRIBUTE_VALUE_ALREADY_DISABLE);
+                    }
+                }
+        );
     }
 
     private void validateNotFoundAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds) {

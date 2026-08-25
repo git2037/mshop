@@ -52,6 +52,7 @@ public enum ProductServiceCode implements ErrorCode {
     ATTRIBUTE_VALUE_NOT_FOUND("ATTRIBUTE_VALUE_404", "Attribute value not found"),
     ATTRIBUTE_VALUE_ALREADY_EXIST("ATTRIBUTE_VALUE_400", "This attribute value already exists."),
     DUPLICATED_ATTRIBUTE_CODE("ATTRIBUTE_VALUE_401", "Duplicated attribute code"),
+    ATTRIBUTE_VALUE_ALREADY_DISABLE("ATTRIBUTE_VALUE_402", "Attribute value already disabled"),
 
     // product image
     PRODUCT_IMAGES_NOT_NULL("PRODUCT_IMAGE_001", "Product images can not be null"),
