@@ -2,9 +2,9 @@ package com.mshop.app.product.mapper;
 
 import com.mshop.app.product.model.Attribute;
 import com.mshop.app.product.model.AttributeValue;
-import com.mshop.app.product.request.attribute.CreateAttributeRequest;
-import com.mshop.app.product.request.attribute.CreateAttributeValueRequest;
-import com.mshop.app.product.request.attribute.UpdateAttributeRequest;
+import com.mshop.app.product.dto.request.attribute.CreateAttributeRequest;
+import com.mshop.app.product.dto.request.attribute.CreateAttributeValueRequest;
+import com.mshop.app.product.dto.request.attribute.UpdateAttributeRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;

@@ -1,9 +1,9 @@
 package com.mshop.app.product.rest;
 
 import com.mshop.app.common.core.response.ApiResponse;
-import com.mshop.app.product.request.product.image.AttachImagesRequest;
-import com.mshop.app.product.request.product.image.DetachImagesRequest;
-import com.mshop.app.product.request.product.image.SetThumbnailRequest;
+import com.mshop.app.product.dto.request.product.image.AttachImagesRequest;
+import com.mshop.app.product.dto.request.product.image.DetachImagesRequest;
+import com.mshop.app.product.dto.request.product.image.SetThumbnailRequest;
 import com.mshop.app.product.service.ProductImageService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

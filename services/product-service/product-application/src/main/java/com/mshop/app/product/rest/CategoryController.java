@@ -2,9 +2,9 @@ package com.mshop.app.product.rest;
 
 import com.mshop.app.product.mapper.CategoryRequestMapper;
 import com.mshop.app.product.model.Category;
-import com.mshop.app.product.request.category.CategoryCreationRequest;
-import com.mshop.app.product.request.category.CategoryMovingRequest;
-import com.mshop.app.product.request.category.CategoryUpdatingRequest;
+import com.mshop.app.product.dto.request.category.CategoryCreationRequest;
+import com.mshop.app.product.dto.request.category.CategoryMovingRequest;
+import com.mshop.app.product.dto.request.category.CategoryUpdatingRequest;
 import com.mshop.app.product.search.CategorySearchConfig;
 import com.mshop.app.product.service.CategoryService;
 import com.mshop.app.common.core.response.ApiResponse;

@@ -1,8 +1,8 @@
 package com.mshop.app.product.mapper;
 
 import com.mshop.app.product.model.Category;
-import com.mshop.app.product.request.category.CategoryCreationRequest;
-import com.mshop.app.product.request.category.CategoryUpdatingRequest;
+import com.mshop.app.product.dto.request.category.CategoryCreationRequest;
+import com.mshop.app.product.dto.request.category.CategoryUpdatingRequest;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
