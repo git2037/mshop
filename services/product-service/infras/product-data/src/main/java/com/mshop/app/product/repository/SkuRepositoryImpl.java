@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Slf4j
@@ -59,5 +60,10 @@ public class SkuRepositoryImpl implements SkuRepository {
     @Override
     public boolean existsById(String id) {
         return skuJPARepository.existsById(id);
+    }
+
+    @Override
+    public Optional<Sku> findSkuById(String id) {
+        return skuJPARepository.findById(id).map(skuMapper::toDto);
     }
 }

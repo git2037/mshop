@@ -15,4 +15,8 @@ public interface SkuService {
     List<SkuAttributeValue> getAllEnableSkuByProductId(String productId);
 
     List<SkuAttributeValue> getById(String id);
+
+    void disable(String skuId);
+
+    void enable(String skuId);
 }

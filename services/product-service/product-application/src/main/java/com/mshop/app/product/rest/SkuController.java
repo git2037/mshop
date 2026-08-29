@@ -10,7 +10,9 @@ import com.mshop.app.product.model.SkuAttributeValue;
 import com.mshop.app.product.service.SkuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -58,6 +60,18 @@ public class SkuController {
 
         return ApiResponse.buildSuccessResponse("Fetched sku successfully",
                 toSkuResponse(skuAttributeValues));
+    }
+
+    @DeleteMapping("/admin/skus/{id}")
+    public ApiResponse<Void> disable(@PathVariable("id") String skuId) {
+        skuService.disable(skuId);
+        return ApiResponse.buildSuccessResponse("Disabled sku successfully", null);
+    }
+
+    @PatchMapping("/admin/skus/{id}")
+    public ApiResponse<Void> enable(@PathVariable("id") String skuId) {
+        skuService.enable(skuId);
+        return ApiResponse.buildSuccessResponse("Enabled sku successfully", null);
     }
 
     private List<SkuResponse> toSkuResponse(List<SkuAttributeValue> skuAttributeValues) {

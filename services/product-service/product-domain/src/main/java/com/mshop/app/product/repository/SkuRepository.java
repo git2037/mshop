@@ -4,6 +4,7 @@ import com.mshop.app.product.model.Sku;
 import com.mshop.app.product.model.SkuAttributeValue;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface SkuRepository {
 
@@ -16,4 +17,6 @@ public interface SkuRepository {
     List<SkuAttributeValue> findById(String id);
 
     boolean existsById(String id);
+
+    Optional<Sku> findSkuById(String id);
 }

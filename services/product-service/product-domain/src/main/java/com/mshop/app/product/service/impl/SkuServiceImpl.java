@@ -77,11 +77,48 @@ public class SkuServiceImpl implements SkuService {
     @Override
     public List<SkuAttributeValue> getById(String id) {
         if (!skuRepository.existsById(id)) {
-            log.warn("Sku [id={}] not found]", id);
-            throw new ResourceNotFoundException(ProductServiceCode.SKU_NOT_FOUND);
+            throw skuNotFoundException(id);
         }
 
         return skuRepository.findById(id);
+    }
+
+    @Override
+    public void disable(String skuId) {
+        Sku sku = findById(skuId);
+
+        if (sku.getDeleted() != null) {
+            log.warn("Sku[id={}] has been disabled", skuId);
+            return;
+        }
+
+        sku.disable();
+        log.info("Disable sku[id={}]", skuId);
+        skuRepository.save(sku);
+    }
+
+    @Override
+    public void enable(String skuId) {
+        Sku sku = findById(skuId);
+
+        if (sku.getDeleted() == null) {
+            log.warn("Sku[id={}] has been enabled", skuId);
+            return;
+        }
+
+        sku.enable();
+        log.info("Enable sku[id={}]", skuId);
+        skuRepository.save(sku);
+    }
+
+    private ResourceNotFoundException skuNotFoundException(String skuId) {
+        log.warn("Sku [id={}] not found]", skuId);
+        return new ResourceNotFoundException(ProductServiceCode.SKU_NOT_FOUND);
+    }
+
+    private Sku findById(String skuId) {
+        return skuRepository.findSkuById(skuId)
+                .orElseThrow(() -> skuNotFoundException(skuId));
     }
 
     private void validateAttributeValue(Set<AttributeValue> attributeValueList, Set<String> attributeValueIds) {
