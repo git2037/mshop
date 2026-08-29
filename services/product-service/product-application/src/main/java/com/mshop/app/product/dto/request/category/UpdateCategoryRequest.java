@@ -8,7 +8,9 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryMovingRequest {
-    @NotBlankIfPresent(message = "CATEGORY_PARENT_ID_NOT_BLANK_IF_PRESENT")
-    private String parentId;
+public class UpdateCategoryRequest {
+    @NotBlankIfPresent(message = "CATEGORY_CODE_NOT_BLANK_IF_PRESENT")
+    private String code;
+    @NotBlankIfPresent(message = "CATEGORY_NAME_NOT_BLANK_IF_PRESENT")
+    private String name;
 }
