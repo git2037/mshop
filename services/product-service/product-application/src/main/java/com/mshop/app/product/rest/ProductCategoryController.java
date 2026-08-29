@@ -4,6 +4,7 @@ import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.product.dto.request.product.AddProductCategoryRequest;
 import com.mshop.app.product.dto.request.product.RemoveProductCategoryRequest;
 import com.mshop.app.product.service.ProductCategoryService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("api/v1/admin/products/{id}/categories")
 @RestController
 @RequiredArgsConstructor
+@IsAdmin
 public class ProductCategoryController {
 
     private final ProductCategoryService service;

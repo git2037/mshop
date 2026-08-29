@@ -9,6 +9,7 @@ import com.mshop.app.product.dto.request.attribute.CreateAttributeRequest;
 import com.mshop.app.product.dto.request.attribute.UpdateAttributeRequest;
 import com.mshop.app.product.search.AttributeSearchConfig;
 import com.mshop.app.product.service.AttributeService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +32,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("api/v1/admin/attributes")
 @RestController
+@IsAdmin
 public class AttributeController {
 
     private final AttributeService attributeService;
