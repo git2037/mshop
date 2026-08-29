@@ -8,6 +8,7 @@ import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.dto.request.attribute.CreateAttributeValueRequest;
 import com.mshop.app.product.dto.request.attribute.UpdateAttributeValueRequest;
 import com.mshop.app.product.service.AttributeValueService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,7 @@ import java.util.Map;
 @RequestMapping("api/v1/admin/attributes")
 @RestController
 @RequiredArgsConstructor
+@IsAdmin
 public class AttributeValueController {
 
     private final AttributeValueService attributeValueService;

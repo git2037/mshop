@@ -8,6 +8,7 @@ import com.mshop.app.product.mapper.SkuRequestMapper;
 import com.mshop.app.product.model.Sku;
 import com.mshop.app.product.model.SkuAttributeValue;
 import com.mshop.app.product.service.SkuService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,6 +32,7 @@ public class SkuController {
     private final SkuRequestMapper skuMapper;
 
     @PostMapping("/admin/products/{id}/skus")
+    @IsAdmin
     public ApiResponse<Sku> createSku(@Valid @RequestBody CreateSkuRequest request,
                                       @PathVariable("id") String productId) {
         Sku sku = skuMapper.toSku(request, productId);
@@ -39,6 +41,7 @@ public class SkuController {
     }
 
     @GetMapping("/admin/products/{id}/skus")
+    @IsAdmin
     public ApiResponse<List<SkuResponse>> getSkus(@PathVariable("id") String productId) {
         List<SkuAttributeValue> skuAttributeValues = skuService.getAllByProductId(productId);
 
@@ -55,6 +58,7 @@ public class SkuController {
     }
 
     @GetMapping("/admin/skus/{id}")
+    @IsAdmin
     public ApiResponse<List<SkuResponse>> getSku(@PathVariable("id") String skuId) {
         List<SkuAttributeValue> skuAttributeValues = skuService.getById(skuId);
 
@@ -63,12 +67,14 @@ public class SkuController {
     }
 
     @DeleteMapping("/admin/skus/{id}")
+    @IsAdmin
     public ApiResponse<Void> disable(@PathVariable("id") String skuId) {
         skuService.disable(skuId);
         return ApiResponse.buildSuccessResponse("Disabled sku successfully", null);
     }
 
     @PatchMapping("/admin/skus/{id}")
+    @IsAdmin
     public ApiResponse<Void> enable(@PathVariable("id") String skuId) {
         skuService.enable(skuId);
         return ApiResponse.buildSuccessResponse("Enabled sku successfully", null);

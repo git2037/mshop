@@ -27,3 +27,6 @@ minio:
   secret-key: password
   bucket-name: mshop
   product-image-prefix: product-images
+
+keycloak:
+  issuer-uri: http://localhost:8080/realms/mshop

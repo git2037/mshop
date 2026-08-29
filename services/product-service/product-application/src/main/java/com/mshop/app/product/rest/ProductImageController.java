@@ -5,6 +5,7 @@ import com.mshop.app.product.dto.request.product.image.AttachImagesRequest;
 import com.mshop.app.product.dto.request.product.image.DetachImagesRequest;
 import com.mshop.app.product.dto.request.product.image.SetThumbnailRequest;
 import com.mshop.app.product.service.ProductImageService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -20,9 +21,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RequestMapping("api/v1/products/{id}")
+@RequestMapping("api/v1/admin/products/{id}")
 @RestController
 @RequiredArgsConstructor
+@IsAdmin
 public class ProductImageController {
 
     private final ProductImageService productImageService;

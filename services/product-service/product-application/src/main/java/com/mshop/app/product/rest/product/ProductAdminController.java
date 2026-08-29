@@ -9,6 +9,7 @@ import com.mshop.app.product.model.Product;
 import com.mshop.app.product.dto.request.product.CreateProductRequest;
 import com.mshop.app.product.dto.request.product.UpdateProductRequest;
 import com.mshop.app.product.service.ProductService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -31,6 +32,7 @@ import java.util.Map;
 @Slf4j
 @RequestMapping("api/v1/admin/products")
 @RestController
+@IsAdmin
 public class ProductAdminController {
 
     private final ProductService service;

@@ -10,6 +10,7 @@ import com.mshop.app.product.service.CategoryService;
 import com.mshop.app.common.core.response.ApiResponse;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.QueryParamParser;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -47,7 +48,7 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    //admin
+    @IsAdmin
     public ApiResponse<Category> create(@RequestBody @Valid CategoryCreationRequest request) {
         Category category = categoryMapper.toCategory(request);
         Category createdCategory = categoryService.create(category);
@@ -55,7 +56,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    //admin
+    @IsAdmin
     public ApiResponse<List<Category>> getAll(@RequestParam(required = false, name = "sort") List<String> sort,
                                               @RequestParam Map<String, String> filter) {
         Query query = QueryParamParser.parseQueryParam(filter, sort, searchConfig);
@@ -90,7 +91,7 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    //admin
+    @IsAdmin
     public ApiResponse<Category> update(@PathVariable("id") String categoryId,
                                         @RequestBody @Valid CategoryUpdatingRequest request) {
         Category payload = categoryMapper.toCategory(request);
@@ -99,7 +100,7 @@ public class CategoryController {
     }
 
     @PostMapping("/{id}/move")
-    //admin
+    @IsAdmin
     public ApiResponse<Void> moveTree(@PathVariable("id") String categoryId,
                                       @RequestBody @Valid CategoryMovingRequest request) {
         String parentId = request.getParentId();
@@ -108,14 +109,14 @@ public class CategoryController {
     }
 
     @DeleteMapping("/{id}")
-    //admin
+    @IsAdmin
     public ApiResponse<Void> disable(@PathVariable("id") String categoryId) {
         categoryService.disable(categoryId);
         return ApiResponse.buildSuccessResponse("Category successfully deleted", null);
     }
 
     @PostMapping("/{id}")
-    //admin
+    @IsAdmin
     public ApiResponse<Void> enable(@PathVariable("id") String categoryId) {
         categoryService.enable(categoryId);
         return ApiResponse.buildSuccessResponse("Category successfully enabled", null);

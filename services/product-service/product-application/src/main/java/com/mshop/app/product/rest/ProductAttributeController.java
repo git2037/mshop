@@ -5,6 +5,7 @@ import com.mshop.app.product.model.AttributeValue;
 import com.mshop.app.product.dto.request.product.AttachAttributeValueRequest;
 import com.mshop.app.product.dto.request.product.DetachProductAttributeValueRequest;
 import com.mshop.app.product.service.ProductAttributeService;
+import com.mshop.app.security.anotation.IsAdmin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +37,7 @@ public class ProductAttributeController {
 
     @PostMapping("/admin/products/{id}/attributes")
     @ResponseStatus(HttpStatus.CREATED)
+    @IsAdmin
     public ApiResponse<Void> attachAttributeValue(@PathVariable("id") String productId,
                                                   @RequestBody @Valid AttachAttributeValueRequest request) {
         service.attachAttributeValuesToProduct(productId, request.getAttributeValueIds());
@@ -43,6 +45,7 @@ public class ProductAttributeController {
     }
 
     @DeleteMapping("/admin/products/{id}/attributes")
+    @IsAdmin
     public ApiResponse<Void> detachAttributeValue(@PathVariable("id") String productId,
                                                   @RequestBody @Valid DetachProductAttributeValueRequest request) {
         service.detachAttributeValueFromProduct(productId, request.getAttributeValueIds());
@@ -50,6 +53,7 @@ public class ProductAttributeController {
     }
 
     @GetMapping("/admin/products/{id}/attributes")
+    @IsAdmin
     public ApiResponse<List<AttributeValue>> getAllAttributes(@PathVariable("id") String productId) {
         return ApiResponse.buildSuccessResponse("Successfully fetched attribute values from product",
                 service.getAllAttributeValuesByProductId(productId));
