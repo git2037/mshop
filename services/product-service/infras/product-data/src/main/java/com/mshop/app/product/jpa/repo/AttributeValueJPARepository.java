@@ -27,9 +27,13 @@ public interface AttributeValueJPARepository extends JpaRepository<AttributeValu
 
     @Query("""
             select av
-            from AttributeValueEntity av, ProductAttributeValueEntity pav
+            from AttributeValueEntity av,
+                 ProductAttributeValueEntity pav,
+                 AttributeEntity a
             where pav.productId = :productId
               and av.id = pav.attributeValueId
+              and a.code = av.attributeCode
+              and a.deleted is null
               and av.deleted is null
             """)
     List<AttributeValueEntity> findAllEnableAttributeValueInProductAttributeValueByProductId(

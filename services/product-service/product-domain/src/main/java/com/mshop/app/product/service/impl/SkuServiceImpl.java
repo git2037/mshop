@@ -87,7 +87,7 @@ public class SkuServiceImpl implements SkuService {
     public void disable(String skuId) {
         Sku sku = findById(skuId);
 
-        if (sku.getDeleted() != null) {
+        if (sku.isDisabled()) {
             log.warn("Sku[id={}] has been disabled", skuId);
             return;
         }
@@ -101,7 +101,7 @@ public class SkuServiceImpl implements SkuService {
     public void enable(String skuId) {
         Sku sku = findById(skuId);
 
-        if (sku.getDeleted() == null) {
+        if (sku.isEnabled()) {
             log.warn("Sku[id={}] has been enabled", skuId);
             return;
         }
