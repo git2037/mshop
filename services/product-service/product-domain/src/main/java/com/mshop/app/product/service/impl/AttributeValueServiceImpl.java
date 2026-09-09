@@ -66,7 +66,7 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     public void disable(String attributeValueId) {
         AttributeValue attributeValue = findById(attributeValueId);
 
-        if (attributeValue.getDeleted() != null) {
+        if (attributeValue.isDisabled()) {
             log.warn("Attribute value [id={}] has been disabled", attributeValueId);
             return;
         }
@@ -81,17 +81,9 @@ public class AttributeValueServiceImpl implements AttributeValueService {
     public void enable(String attributeValueId) {
         AttributeValue attributeValue = findById(attributeValueId);
 
-        if (attributeValue.getDeleted() == null) {
+        if (attributeValue.isEnabled()) {
             log.warn("Attribute value [id={}] has been enabled", attributeValueId);
             return;
-        }
-
-        String attributeCode = attributeValue.getAttributeCode();
-        Attribute attribute = attributeRepository.findByCode(attributeCode)
-                        .orElseThrow();
-        if (attribute.getDeleted() != null) {
-            log.error("Attribute[code={}] disabled", attributeCode);
-            throw new AttributeAlreadyDisableException(ProductServiceCode.ATTRIBUTE_ALREADY_DISABLED);
         }
 
         attributeValue.enable();

@@ -1,13 +1,14 @@
 package com.mshop.app.product.service.impl;
 
+import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.product.constant.ProductServiceConstant;
 import com.mshop.app.product.exception.ProductServiceCode;
-import com.mshop.app.product.exception.category.CategoryNotMoveException;
 import com.mshop.app.product.exception.category.CategoryNotFoundException;
+import com.mshop.app.product.exception.category.CategoryNotMoveException;
+import com.mshop.app.product.mapper.CategoryDomainMapper;
 import com.mshop.app.product.model.Category;
 import com.mshop.app.product.repository.CategoryRepository;
 import com.mshop.app.product.service.CategoryService;
-import com.mshop.app.common.core.searching.model.Query;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ import java.util.function.Supplier;
 public class CategoryServiceImpl implements CategoryService {
 
     private final CategoryRepository categoryRepository;
-    private static final String FORWARD_SLASH = ProductServiceConstant.FORWARD_SLASH;
+    private final CategoryDomainMapper categoryMapper;
 
     @Override
     @Transactional
@@ -37,12 +38,12 @@ public class CategoryServiceImpl implements CategoryService {
         boolean hasParent = StringUtils.hasText(parentId);
         String path = hasParent
                 ? resolveChildPath(parentId, code)
-                : FORWARD_SLASH + code;
+                : ProductServiceConstant.FORWARD_SLASH + code;
 
         category.setParentId(hasParent ? parentId : null);
         category.setPath(path);
 
-        log.info("Save category[name={}, code={}, parentId={}, path={}]", category.getName(), code, parentId, path);
+        log.info("Create category: {}", category);
         return categoryRepository.save(category);
     }
 
@@ -59,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<Category> getAllChildrenCategories(String parentId) {
         Category category = findById(parentId);
-        return categoryRepository.findAllByPathStartsWithAndDeletedIsNull(category.getPath() + FORWARD_SLASH);
+        return categoryRepository.findAllByPathStartsWithAndDeletedIsNull(category.getPath() + ProductServiceConstant.FORWARD_SLASH);
     }
 
     @Override
@@ -90,21 +91,9 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public Category update(String categoryId, Category payload) {
         Category category = findById(categoryId);
-        String name = category.getName();
-        String payloadName = payload.getName();
-        if (isUpdate(name, payloadName)) {
-            category.setName(payloadName);
-        }
+        categoryMapper.update(payload, category);
 
-        String path = category.getPath();
-        String payloadCode = payload.getCode();
-        if (isUpdate(path, payloadCode)) {
-            category.setPath(createNewPath(path, payloadCode));
-            category.setCode(payloadCode);
-        }
-
-        log.info("Update category[id={}, name={}, code={}, path={}]", category.getId(),
-                category.getName(), category.getCode(), category.getPath());
+        log.info("Update category[id={}]: {}", categoryId, category);
         return categoryRepository.save(category);
     }
 
@@ -129,7 +118,7 @@ public class CategoryServiceImpl implements CategoryService {
         categoryRepository.save(category);
 
         String oldPath = category.getPath();
-        String newPath = parentCategory.getPath() + FORWARD_SLASH + category.getCode();
+        String newPath = parentCategory.getPath() + ProductServiceConstant.FORWARD_SLASH + category.getCode();
         log.info("Update paths for category[id={}] subtree", category.getId());
         categoryRepository.updatePathBatch(oldPath, newPath);
     }
@@ -138,7 +127,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void disable(String categoryId) {
         Category category = findById(categoryId);
-        if (category.getDeleted() != null) {
+        if (category.isDisabled()) {
             log.warn("Category[id={}] is already disabled", categoryId);
         } else {
             log.info("Disable category[id={}] from DB", categoryId);
@@ -151,7 +140,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void enable(String categoryId) {
         Category category = findById(categoryId);
-        if (category.getDeleted() == null) {
+        if (category.isEnabled()) {
             log.warn("Category[id={}] is already enable", categoryId);
         } else {
             log.info("Enable category[id={}] from DB", categoryId);
@@ -161,32 +150,24 @@ public class CategoryServiceImpl implements CategoryService {
 
     private String resolveChildPath(String parentId, String code) {
         Category parentCategory = findById(parentId);
-        return parentCategory.getPath() + FORWARD_SLASH + code;
+        return parentCategory.getPath() + ProductServiceConstant.FORWARD_SLASH + code;
     }
 
     private List<String> extractChainPaths(String path) {
         if (path == null || path.isBlank()) return List.of();
 
-        String[] parts = path.split(FORWARD_SLASH);
+        String[] parts = path.split(ProductServiceConstant.FORWARD_SLASH);
         List<String> result = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
 
         for (String part : parts) {
             if (part.isEmpty()) continue;
 
-            stringBuilder.append(FORWARD_SLASH).append(part);
+            stringBuilder.append(ProductServiceConstant.FORWARD_SLASH).append(part);
             result.add(stringBuilder.toString());
         }
 
         return result;
-    }
-
-    private boolean isUpdate(String oldValue, String newValue) {
-        return (newValue != null) && (!newValue.equals(oldValue));
-    }
-
-    private String createNewPath(String oldPath, String newCode) {
-        return oldPath.substring(0, oldPath.lastIndexOf(FORWARD_SLASH) + 1) + newCode;
     }
 
     public Category findById(String id) {

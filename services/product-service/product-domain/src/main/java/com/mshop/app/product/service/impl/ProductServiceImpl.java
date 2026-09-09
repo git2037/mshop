@@ -9,7 +9,6 @@ import com.mshop.app.product.repository.ProductRepository;
 import com.mshop.app.product.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,37 +27,32 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public Product create(Product product) {
-        log.info("Create product[name={}, description={}]",
-                product.getName(), StringUtils.abbreviate(product.getDescription(), 15));
+        log.info("Create product: {}", product);
         return productRepository.save(product);
     }
 
     @Override
     public List<Product> getAll(Query query) {
-        List<Product> products = productRepository.findAll(query);
-        products.forEach(this::setThumbnailUrl);
-        return products;
+        return productRepository.findAll(query).stream()
+                .map(this::setThumbnailUrl)
+                .toList();
     }
 
     @Override
     public List<Product> getAllEnableProduct(Query query) {
-        List<Product> products = productRepository.findAllEnableProduct(query);
-        products.forEach(this::setThumbnailUrl);
-        return products;
+        return productRepository.findAllEnableProduct(query).stream()
+                .map(this::setThumbnailUrl)
+                .toList();
     }
 
     @Override
     public Product getById(String id) {
-        Product product = productReader.findById(id);
-        setThumbnailUrl(product);
-        return product;
+        return setThumbnailUrl(productReader.findById(id));
     }
 
     @Override
     public Product getEnableProductById(String id) {
-        Product product = productReader.findEnableProductById(id);
-        setThumbnailUrl(product);
-        return product;
+        return setThumbnailUrl(productReader.findEnableProductById(id));
     }
 
     @Override
@@ -67,8 +61,8 @@ public class ProductServiceImpl implements ProductService {
         String productId = product.getId();
         Product productDB = productReader.findById(productId);
         productDomainMapper.updateProductFromDto(product, productDB);
-        log.info("Update product[id={}, name={}, description={}]", productId, product.getName(),
-                StringUtils.abbreviate(product.getDescription(), 15));
+
+        log.info("Update product[id={}]: {}", productId, productDB);
         return productRepository.save(productDB);
     }
 
@@ -77,13 +71,14 @@ public class ProductServiceImpl implements ProductService {
     public void disable(String productId) {
         Product product = productReader.findById(productId);
 
-        if (product.getDeleted() != null) {
+        if (product.isDisabled()) {
             log.info("Product[id={}] already disabled", product.getId());
             return;
         }
 
+        product.disable();
         log.info("Disable product[id={}]", productId);
-        productRepository.disable(productId);
+        productRepository.save(product);
     }
 
     @Override
@@ -91,16 +86,17 @@ public class ProductServiceImpl implements ProductService {
     public void enable(String productId) {
         Product product = productReader.findById(productId);
 
-        if (product.getDeleted() == null) {
+        if (product.isEnabled()) {
             log.info("Product[id={}] already enabled", product.getId());
             return;
         }
 
+        product.enable();
         log.info("Enable product[id={}]", productId);
-        productRepository.enable(productId);
+        productRepository.save(product);
     }
 
-    private void setThumbnailUrl(Product product) {
+    private Product setThumbnailUrl(Product product) {
         String thumbnail = product.getThumbnail();
 
         if (thumbnail != null) {
@@ -109,5 +105,6 @@ public class ProductServiceImpl implements ProductService {
             );
         }
 
+        return product;
     }
 }

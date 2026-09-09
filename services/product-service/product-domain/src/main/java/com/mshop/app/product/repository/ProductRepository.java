@@ -19,8 +19,4 @@ public interface ProductRepository {
     Optional<Product> findByIdAndDeletedIsNull(String id);
 
     boolean existById(String id);
-
-    void disable(String productId);
-
-    void enable(String productId);
 }

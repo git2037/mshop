@@ -22,4 +22,12 @@ public class BaseDto {
     public void enable() {
         this.deleted = null;
     }
+
+    public boolean isDisabled() {
+        return this.deleted != null;
+    }
+
+    public boolean isEnabled() {
+        return this.deleted == null;
+    }
 }

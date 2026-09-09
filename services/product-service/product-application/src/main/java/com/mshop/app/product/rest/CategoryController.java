@@ -1,10 +1,10 @@
 package com.mshop.app.product.rest;
 
+import com.mshop.app.product.dto.request.category.CreateCategoryRequest;
+import com.mshop.app.product.dto.request.category.UpdateCategoryRequest;
 import com.mshop.app.product.mapper.CategoryRequestMapper;
 import com.mshop.app.product.model.Category;
-import com.mshop.app.product.dto.request.category.CategoryCreationRequest;
-import com.mshop.app.product.dto.request.category.CategoryMovingRequest;
-import com.mshop.app.product.dto.request.category.CategoryUpdatingRequest;
+import com.mshop.app.product.dto.request.category.MoveCategoryRequest;
 import com.mshop.app.product.search.CategorySearchConfig;
 import com.mshop.app.product.service.CategoryService;
 import com.mshop.app.common.core.response.ApiResponse;
@@ -49,7 +49,7 @@ public class CategoryController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @IsAdmin
-    public ApiResponse<Category> create(@RequestBody @Valid CategoryCreationRequest request) {
+    public ApiResponse<Category> create(@RequestBody @Valid CreateCategoryRequest request) {
         Category category = categoryMapper.toCategory(request);
         Category createdCategory = categoryService.create(category);
         return ApiResponse.buildSuccessResponse("Create category successfully", createdCategory);
@@ -93,7 +93,7 @@ public class CategoryController {
     @PutMapping("/{id}")
     @IsAdmin
     public ApiResponse<Category> update(@PathVariable("id") String categoryId,
-                                        @RequestBody @Valid CategoryUpdatingRequest request) {
+                                        @RequestBody @Valid UpdateCategoryRequest request) {
         Category payload = categoryMapper.toCategory(request);
         Category updatedCategory = categoryService.update(categoryId, payload);
         return ApiResponse.buildSuccessResponse("Category successfully updated", updatedCategory);
@@ -102,7 +102,7 @@ public class CategoryController {
     @PostMapping("/{id}/move")
     @IsAdmin
     public ApiResponse<Void> moveTree(@PathVariable("id") String categoryId,
-                                      @RequestBody @Valid CategoryMovingRequest request) {
+                                      @RequestBody @Valid MoveCategoryRequest request) {
         String parentId = request.getParentId();
         categoryService.move(categoryId, parentId);
         return ApiResponse.buildSuccessResponse("Category successfully move", null);

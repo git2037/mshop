@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CategoryCreationRequest {
+public class CreateCategoryRequest {
 
     @NotBlank(message = "CATEGORY_NAME_NOT_BLANK")
     private String name;

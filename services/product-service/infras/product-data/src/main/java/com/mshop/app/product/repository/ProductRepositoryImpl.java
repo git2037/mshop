@@ -1,11 +1,11 @@
 package com.mshop.app.product.repository;
 
-import com.mshop.app.product.exception.ProductServiceCode;
-import com.mshop.app.product.constant.CategoryField;
 import com.mshop.app.common.core.jpa.spec.SpecificationBuilder;
 import com.mshop.app.common.core.searching.filter.FilterCondition;
 import com.mshop.app.common.core.searching.model.Query;
 import com.mshop.app.common.core.searching.parser.PaginationParser;
+import com.mshop.app.product.constant.CategoryField;
+import com.mshop.app.product.exception.ProductServiceCode;
 import com.mshop.app.product.exception.product.ProductAlreadyExistException;
 import com.mshop.app.product.jpa.entity.ProductEntity;
 import com.mshop.app.product.jpa.repo.ProductJPARepository;
@@ -88,18 +88,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     public boolean existById(String id) {
         return productJPARepository.existsById(id);
-    }
-
-    @Override
-    @Transactional
-    public void disable(String productId) {
-        productJPARepository.disable(productId);
-    }
-
-    @Override
-    @Transactional
-    public void enable(String productId) {
-        productJPARepository.enable(productId);
     }
 
     private Specification<ProductEntity> getProductSpecification(List<FilterCondition> conditions, boolean filterEnableCategory) {
