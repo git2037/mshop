@@ -86,14 +86,6 @@ public class AttributeValueServiceImpl implements AttributeValueService {
             return;
         }
 
-        String attributeCode = attributeValue.getAttributeCode();
-        Attribute attribute = attributeRepository.findByCode(attributeCode)
-                        .orElseThrow();
-        if (attribute.getDeleted() != null) {
-            log.error("Attribute[code={}] disabled", attributeCode);
-            throw new AttributeAlreadyDisableException(ProductServiceCode.ATTRIBUTE_ALREADY_DISABLED);
-        }
-
         attributeValue.enable();
         log.info("Enable attribute value[id={}]", attributeValueId);
         attributeValueRepository.save(attributeValue);
