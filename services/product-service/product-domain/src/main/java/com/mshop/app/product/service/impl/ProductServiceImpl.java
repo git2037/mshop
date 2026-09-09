@@ -71,7 +71,7 @@ public class ProductServiceImpl implements ProductService {
     public void disable(String productId) {
         Product product = productReader.findById(productId);
 
-        if (product.getDeleted() != null) {
+        if (product.isDisabled()) {
             log.info("Product[id={}] already disabled", product.getId());
             return;
         }
@@ -86,7 +86,7 @@ public class ProductServiceImpl implements ProductService {
     public void enable(String productId) {
         Product product = productReader.findById(productId);
 
-        if (product.getDeleted() == null) {
+        if (product.isEnabled()) {
             log.info("Product[id={}] already enabled", product.getId());
             return;
         }

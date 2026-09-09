@@ -6,7 +6,6 @@ import com.mshop.app.product.exception.attribute.AttributeNotFoundException;
 import com.mshop.app.product.mapper.AttributeDomainMapper;
 import com.mshop.app.product.model.Attribute;
 import com.mshop.app.product.repository.AttributeRepository;
-import com.mshop.app.product.repository.AttributeValueRepository;
 import com.mshop.app.product.service.AttributeService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,7 +21,6 @@ public class AttributeServiceImpl implements AttributeService {
 
     private final AttributeRepository attributeRepository;
     private final AttributeDomainMapper attributeDomainMapper;
-    private final AttributeValueRepository attributeValueRepository;
 
     @Override
     @Transactional
@@ -56,7 +54,7 @@ public class AttributeServiceImpl implements AttributeService {
     public void disable(String attributeId) {
         Attribute attributeDb = findById(attributeId);
 
-        if (attributeDb.getDeleted() != null) {
+        if (attributeDb.isDisabled()) {
             log.warn("Attribute[id={}] has been disabled", attributeId);
             return;
         }
@@ -64,10 +62,6 @@ public class AttributeServiceImpl implements AttributeService {
         attributeDb.disable();
         log.info("Disable attribute[id={}]", attributeId);
         attributeRepository.save(attributeDb);
-
-        String attributeCode = attributeDb.getCode();
-        log.info("Disable attribute values[attribute code={}]", attributeCode);
-        attributeValueRepository.disableAllByAttributeCode(attributeCode);
     }
 
     @Override
@@ -75,7 +69,7 @@ public class AttributeServiceImpl implements AttributeService {
     public void enable(String attributeId) {
         Attribute attributeDb = findById(attributeId);
 
-        if (attributeDb.getDeleted() == null) {
+        if (attributeDb.isEnabled()) {
             log.warn("Attribute[id={}] has been enabled", attributeId);
             return;
         }
@@ -83,10 +77,6 @@ public class AttributeServiceImpl implements AttributeService {
         attributeDb.enable();
         log.info("Enable attribute[id={}]", attributeId);
         attributeRepository.save(attributeDb);
-
-        String attributeCode = attributeDb.getCode();
-        log.info("Enable attribute values[attribute code={}]", attributeCode);
-        attributeValueRepository.enableAllByAttributeCode(attributeCode);
     }
 
     private Attribute findById(String attributeId) {

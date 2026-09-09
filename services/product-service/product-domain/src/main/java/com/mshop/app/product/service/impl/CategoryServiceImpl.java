@@ -127,7 +127,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void disable(String categoryId) {
         Category category = findById(categoryId);
-        if (category.getDeleted() != null) {
+        if (category.isDisabled()) {
             log.warn("Category[id={}] is already disabled", categoryId);
         } else {
             log.info("Disable category[id={}] from DB", categoryId);
@@ -140,7 +140,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public void enable(String categoryId) {
         Category category = findById(categoryId);
-        if (category.getDeleted() == null) {
+        if (category.isEnabled()) {
             log.warn("Category[id={}] is already enable", categoryId);
         } else {
             log.info("Enable category[id={}] from DB", categoryId);
